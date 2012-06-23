@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E5749032-C6FE-459B-950E-619A6E736611}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sekhmet.Serialization.XmlSerializerSupport.Test</RootNamespace>
+    <AssemblyName>Sekhmet.Serialization.XmlSerializerSupport.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="xunit, Version=1.9.0.1566, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\xunit\1.9\xunit.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.extensions">
+      <HintPath>..\..\lib\xunit\1.9\xunit.extensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ArraySerializationSupportTestCase.cs" />
+    <Compile Include="BaseTypeSerializationTestCase.cs" />
+    <Compile Include="Dummies\Bar.cs" />
+    <Compile Include="Dummies\Bar1.cs" />
+    <Compile Include="Dummies\Bar2.cs" />
+    <Compile Include="Dummies\Foo.cs" />
+    <Compile Include="Dummies\FooWithArrays.cs" />
+    <Compile Include="Dummies\FooWithBarBase.cs" />
+    <Compile Include="Dummies\FooWithBarBaseWithOutAttributes.cs" />
+    <Compile Include="Dummies\FooWithIsNullable.cs" />
+    <Compile Include="Dummies\FooWithLists.cs" />
+    <Compile Include="Dummies\FooWithNonIListLists.cs" />
+    <Compile Include="Dummies\FooWithNonNestedList.cs" />
+    <Compile Include="Dummies\FooWithNonNestedListAndProperty.cs" />
+    <Compile Include="Dummies\FooWithReadOnlyProperty.cs" />
+    <Compile Include="Dummies\FooWithSize.cs" />
+    <Compile Include="Dummies\FooWithXmlSerialiableBar.cs" />
+    <Compile Include="Dummies\FooWithXmlSerializableList.cs" />
+    <Compile Include="Dummies\IBar.cs" />
+    <Compile Include="Dummies\NonIListList.cs" />
+    <Compile Include="Dummies\SimpleBar.cs" />
+    <Compile Include="Dummies\SimpleSerializable.cs" />
+    <Compile Include="Dummies\XmlSerializableBar.cs" />
+    <Compile Include="Dummies\XmlSerializableList.cs" />
+    <Compile Include="IsNullableSerializationTestCase.cs" />
+    <Compile Include="ListSerializationSupportTestCase.cs" />
+    <Compile Include="NonIListListSerializationSupportTestCase.cs" />
+    <Compile Include="NonNestedCollectionAndPropertyTestCase.cs" />
+    <Compile Include="NonNestedCollectionTestCase.cs" />
+    <Compile Include="NullableTestCase.cs" />
+    <Compile Include="ObjectListSerializationTestCase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializeNestedSizeTestCase.cs" />
+    <Compile Include="SerializeNullValueTestCase.cs" />
+    <Compile Include="SerializeSizeTestCase.cs" />
+    <Compile Include="TestSerializationOfBarTestCase.cs" />
+    <Compile Include="TestSerializationOfFooTestCase.cs" />
+    <Compile Include="TypeFromAttributeSerializationSupportTestCase.cs" />
+    <Compile Include="XmlChoiceIdentifierTestCase.cs" />
+    <Compile Include="XmlIgnoreTestCase.cs" />
+    <Compile Include="XmlSerializableCollectionTypeTestCase.cs" />
+    <Compile Include="XmlSerializableElementWithValueTestCase.cs" />
+    <Compile Include="XmlSerializableTestCase.cs" />
+    <Compile Include="XmlSerializableUsingXmlSerializerTestCase.cs" />
+    <Compile Include="XmlSerializerSerializationTestCaseBase.cs" />
+    <Compile Include="XmlSerializerConformanceTests\IsNullableTest.cs" />
+    <Compile Include="XmlSerializerConformanceTests\NonNestedCollectionAndAnotherPropertyTest.cs" />
+    <Compile Include="XmlSerializerConformanceTests\NonNestedCollectionTest.cs" />
+    <Compile Include="XmlSerializerConformanceTests\NullableTest.cs" />
+    <Compile Include="XmlSerializerConformanceTests\SerializeNullValueTest.cs" />
+    <Compile Include="XmlSerializerConformanceTests\SerializeReadOnlyPropertyTest.cs" />
+    <Compile Include="XmlSerializerConformanceTests\XmlChoiceIdentifierTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sekhmet.Serialization.TestUtility\Sekhmet.Serialization.TestUtility.csproj">
+      <Project>{080D8BD0-A860-4E89-B7C1-FED9CFE59EF7}</Project>
+      <Name>Sekhmet.Serialization.TestUtility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sekhmet.Serialization.Utility\Sekhmet.Serialization.Utility.csproj">
+      <Project>{58A10A24-70BF-4B70-B444-3029355D29E1}</Project>
+      <Name>Sekhmet.Serialization.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sekhmet.Serialization.XmlSerializerSupport\Sekhmet.Serialization.XmlSerializerSupport.csproj">
+      <Project>{02A42F20-D4C4-472B-BE5B-7BFD4DB54BD0}</Project>
+      <Name>Sekhmet.Serialization.XmlSerializerSupport</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sekhmet.Serialization\Sekhmet.Serialization.csproj">
+      <Project>{A0D1D428-6C14-425F-93E2-4D0522B60DAB}</Project>
+      <Name>Sekhmet.Serialization</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
