@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using NUnit.Framework;
 using Sekhmet.Serialization.XmlSerializerSupport.Test.Dummies;
-using Xunit;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConformanceTests
 {
+    [TestFixture]
     public class NonNestedCollectionTest
     {
         private readonly XElement _expected = XElement.Parse(@"
@@ -24,7 +25,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConforman
 </FooWithNonNestedList>
 ");
 
-        [Fact]
+        [Test]
         public void TestDeserialize()
         {
             var xml = _expected;
@@ -33,13 +34,13 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConforman
 
             var foo = (FooWithNonNestedList) xmlSerializer.Deserialize(xml.CreateReader());
 
-            Assert.Equal(3, foo.Bars.Count);
-            Assert.Equal("a", foo.Bars[0].Value);
-            Assert.Equal("b", foo.Bars[1].Value);
-            Assert.Equal("c", foo.Bars[2].Value);
+            Assert.AreEqual(3, foo.Bars.Count);
+            Assert.AreEqual("a", foo.Bars[0].Value);
+            Assert.AreEqual("b", foo.Bars[1].Value);
+            Assert.AreEqual("c", foo.Bars[2].Value);
         }
 
-        [Fact]
+        [Test]
         public void TestSerialize()
         {
             var foo = new FooWithNonNestedList {

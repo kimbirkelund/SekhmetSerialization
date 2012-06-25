@@ -1,14 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Serialization;
+using NUnit.Framework;
 using Sekhmet.Serialization.XmlSerializerSupport.Test.Dummies;
-using Xunit;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConformanceTests
 {
+    [TestFixture]
     public class SerializeReadOnlyPropertyTest
     {
-        [Fact]
+        [Test]
         public void TestMethod1()
         {
             var xmlSerializer = new XmlSerializer(typeof(FooWithReadOnlyProperty));

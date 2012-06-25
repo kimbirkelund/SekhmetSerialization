@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
-using Xunit;
+using NUnit.Framework;
 
 namespace Sekhmet.Serialization.TestUtility
 {
@@ -43,7 +43,7 @@ namespace Sekhmet.Serialization.TestUtility
         {
             Assert.NotNull(expected);
             Assert.NotNull(actual);
-            Assert.Equal(expected.GetType(), actual.GetType());
+            Assert.AreEqual(expected.GetType(), actual.GetType());
 
             AssertDeepEquals(expected, actual);
         }
@@ -70,14 +70,14 @@ namespace Sekhmet.Serialization.TestUtility
                 return;
             }
 
-            Assert.Equal(expected.Name, actual.Name);
+            Assert.AreEqual(expected.Name, actual.Name);
 
             AssertDeepEquals(expected.Attributes(), actual.Attributes());
 
             if (expected.Elements().Any())
                 AssertDeepEquals(expected.Elements(), actual.Elements());
             else
-                Assert.Equal(expected.Value, actual.Value);
+                Assert.AreEqual(expected.Value, actual.Value);
         }
 
         protected abstract object CreateObject();
@@ -89,7 +89,7 @@ namespace Sekhmet.Serialization.TestUtility
             expected = expected.ToList();
             actual = actual.ToList();
 
-            Assert.Equal(expected.Count(), actual.Count());
+            Assert.AreEqual(expected.Count(), actual.Count());
 
             foreach (var pair in expected.Zip(actual, (f, s) => new { f, s }))
                 AssertDeepEquals(pair.f, pair.s);
@@ -100,12 +100,12 @@ namespace Sekhmet.Serialization.TestUtility
             expected = expected.ToList();
             actual = actual.ToList();
 
-            Assert.Equal(expected.Count(), actual.Count());
+            Assert.AreEqual(expected.Count(), actual.Count());
 
             foreach (var pair in expected.Zip(actual, (f, s) => new { f, s }))
             {
-                Assert.Equal(pair.f.Name, pair.s.Name);
-                Assert.Equal(pair.f.Value, pair.s.Value);
+                Assert.AreEqual(pair.f.Name, pair.s.Name);
+                Assert.AreEqual(pair.f.Value, pair.s.Value);
             }
         }
 
@@ -118,12 +118,12 @@ namespace Sekhmet.Serialization.TestUtility
                 return;
             }
 
-            Assert.IsType(expected.GetType(), actual);
+            Assert.IsInstanceOf(expected.GetType(), actual);
 
             if (expected.GetType().IsValueType)
-                Assert.Equal(expected, actual);
+                Assert.AreEqual(expected, actual);
             else if (expected is string)
-                Assert.Equal(expected, actual);
+                Assert.AreEqual(expected, actual);
             else if (expected is IEnumerable)
             {
                 foreach (var pair in ((IEnumerable)expected).Cast<object>().Zip(((IEnumerable)actual).Cast<object>(), (f, s) => new { f, s }))

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Linq;
-using Xunit;
+using NUnit.Framework;
 
 namespace Sekhmet.Serialization.Test
 {
+    [TestFixture]
     public class SerializationManagerExtensionsTest
     {
-        [Fact]
+        [Test]
         public void TestDeserializeFromLocation_StringGeneric()
         {
             var manager = new SerializationManagerStub();
@@ -18,11 +19,11 @@ namespace Sekhmet.Serialization.Test
             manager.DeserializeFromLocation<SerializationManagerExtensionsTest>(sourceLocation);
 
             Assert.True(XNode.DeepEquals(expectedSource, manager.DeserializeSource));
-            Assert.Equal(typeof(SerializationManagerExtensionsTest), manager.DeserializeTargetType);
-            Assert.Equal(1, manager.DeserializeCallCount);
+            Assert.AreEqual(typeof(SerializationManagerExtensionsTest), manager.DeserializeTargetType);
+            Assert.AreEqual(1, manager.DeserializeCallCount);
         }
 
-        [Fact]
+        [Test]
         public void TestDeserializeFromLocation_StringNonGeneric()
         {
             var manager = new SerializationManagerStub();
@@ -33,11 +34,11 @@ namespace Sekhmet.Serialization.Test
             manager.DeserializeFromLocation(sourceLocation, typeof(SerializationManagerExtensionsTest));
 
             Assert.True(XNode.DeepEquals(expectedSource, manager.DeserializeSource));
-            Assert.Equal(typeof(SerializationManagerExtensionsTest), manager.DeserializeTargetType);
-            Assert.Equal(1, manager.DeserializeCallCount);
+            Assert.AreEqual(typeof(SerializationManagerExtensionsTest), manager.DeserializeTargetType);
+            Assert.AreEqual(1, manager.DeserializeCallCount);
         }
 
-        [Fact]
+        [Test]
         public void TestDeserializeFromLocation_UriGeneric()
         {
             var manager = new SerializationManagerStub();
@@ -48,11 +49,11 @@ namespace Sekhmet.Serialization.Test
             manager.DeserializeFromLocation<SerializationManagerExtensionsTest>(sourceLocation);
 
             Assert.True(XNode.DeepEquals(expectedSource, manager.DeserializeSource));
-            Assert.Equal(typeof(SerializationManagerExtensionsTest), manager.DeserializeTargetType);
-            Assert.Equal(1, manager.DeserializeCallCount);
+            Assert.AreEqual(typeof(SerializationManagerExtensionsTest), manager.DeserializeTargetType);
+            Assert.AreEqual(1, manager.DeserializeCallCount);
         }
 
-        [Fact]
+        [Test]
         public void TestDeserializeFromLocation_UriNonGeneric()
         {
             var manager = new SerializationManagerStub();
@@ -63,11 +64,11 @@ namespace Sekhmet.Serialization.Test
             manager.DeserializeFromLocation(sourceLocation, typeof(SerializationManagerExtensionsTest));
 
             Assert.True(XNode.DeepEquals(expectedSource, manager.DeserializeSource));
-            Assert.Equal(typeof(SerializationManagerExtensionsTest), manager.DeserializeTargetType);
-            Assert.Equal(1, manager.DeserializeCallCount);
+            Assert.AreEqual(typeof(SerializationManagerExtensionsTest), manager.DeserializeTargetType);
+            Assert.AreEqual(1, manager.DeserializeCallCount);
         }
 
-        [Fact]
+        [Test]
         public void TestDeserializeFromString_Generic()
         {
             var manager = new SerializationManagerStub();
@@ -76,11 +77,11 @@ namespace Sekhmet.Serialization.Test
             manager.DeserializeFromString<SerializationManagerExtensionsTest>(expectedSource.ToString());
 
             Assert.True(XNode.DeepEquals(expectedSource, manager.DeserializeSource));
-            Assert.Equal(typeof(SerializationManagerExtensionsTest), manager.DeserializeTargetType);
-            Assert.Equal(1, manager.DeserializeCallCount);
+            Assert.AreEqual(typeof(SerializationManagerExtensionsTest), manager.DeserializeTargetType);
+            Assert.AreEqual(1, manager.DeserializeCallCount);
         }
 
-        [Fact]
+        [Test]
         public void TestDeserializeFromString_NonGeneric()
         {
             var manager = new SerializationManagerStub();
@@ -89,11 +90,11 @@ namespace Sekhmet.Serialization.Test
             manager.DeserializeFromString(expectedSource.ToString(), typeof(SerializationManagerExtensionsTest));
 
             Assert.True(XNode.DeepEquals(expectedSource, manager.DeserializeSource));
-            Assert.Equal(typeof(SerializationManagerExtensionsTest), manager.DeserializeTargetType);
-            Assert.Equal(1, manager.DeserializeCallCount);
+            Assert.AreEqual(typeof(SerializationManagerExtensionsTest), manager.DeserializeTargetType);
+            Assert.AreEqual(1, manager.DeserializeCallCount);
         }
 
-        [Fact]
+        [Test]
         public void TestDeserialize_Generic()
         {
             var manager = new SerializationManagerStub();
@@ -101,12 +102,12 @@ namespace Sekhmet.Serialization.Test
             var expectedSource = new XElement("SMET");
             manager.Deserialize<SerializationManagerExtensionsTest>(expectedSource);
 
-            Assert.Equal(expectedSource, manager.DeserializeSource);
-            Assert.Equal(typeof(SerializationManagerExtensionsTest), manager.DeserializeTargetType);
-            Assert.Equal(1, manager.DeserializeCallCount);
+            Assert.AreEqual(expectedSource, manager.DeserializeSource);
+            Assert.AreEqual(typeof(SerializationManagerExtensionsTest), manager.DeserializeTargetType);
+            Assert.AreEqual(1, manager.DeserializeCallCount);
         }
 
-        [Fact]
+        [Test]
         public void TestSerializeToString()
         {
             var manager = new SerializationManagerStub();
@@ -114,8 +115,8 @@ namespace Sekhmet.Serialization.Test
             var expectedSource = new object();
             manager.SerializeToString(expectedSource);
 
-            Assert.Equal(expectedSource, manager.SerializeSource);
-            Assert.Equal(1, manager.SerializeCallCount);
+            Assert.AreEqual(expectedSource, manager.SerializeSource);
+            Assert.AreEqual(1, manager.SerializeCallCount);
         }
     }
 }

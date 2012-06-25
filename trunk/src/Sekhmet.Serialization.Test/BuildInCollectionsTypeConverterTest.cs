@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Xunit;
+using NUnit.Framework;
 
 namespace Sekhmet.Serialization.Test
 {
+    [TestFixture]
     public class BuildInCollectionsTypeConverterTest
     {
-        [Fact]
+        [Test]
         public void TestGetActualType()
         {
             var converter = new BuiltInCollectionsTypeConverter();
@@ -29,7 +30,7 @@ namespace Sekhmet.Serialization.Test
         {
             var actualType = converter.GetActualType(input);
 
-            Assert.Equal(expectedType, actualType);
+            Assert.AreEqual(expectedType, actualType);
         }
     }
 }

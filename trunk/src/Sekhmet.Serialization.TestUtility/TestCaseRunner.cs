@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using Sekhmet.Serialization.Utility;
-using Xunit.Extensions;
 
 namespace Sekhmet.Serialization.TestUtility
 {
     public abstract class TestCaseRunnerTestBase
     {
-        public static IEnumerable<object[]> TestSerializationTestCasesData
+        public IEnumerable<object[]> TestSerializationTestCasesData
         {
             get { return GetTestCases(); }
         }
 
-        [Theory]
-        [PropertyData("TestSerializationTestCasesData")]
+        [TestCaseSource("TestSerializationTestCasesData")]
         public void TestDeserializationTestCases(ISerializationTestCase testCase)
         {
             var manager = testCase.SerializationManager.Create();
@@ -24,8 +23,7 @@ namespace Sekhmet.Serialization.TestUtility
             testCase.AssertCorrectObject(actual);
         }
 
-        [Theory]
-        [PropertyData("TestSerializationTestCasesData")]
+        [TestCaseSource("TestSerializationTestCasesData")]
         public void TestSerializationTestCases(ISerializationTestCase testCase)
         {
             var manager = testCase.SerializationManager.Create();
@@ -35,7 +33,7 @@ namespace Sekhmet.Serialization.TestUtility
             testCase.AssertCorrectXml(actual);
         }
 
-        private static IEnumerable<object[]> GetTestCases()
+        private IEnumerable<object[]> GetTestCases()
         {
             return AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(a => a.GetTypes())

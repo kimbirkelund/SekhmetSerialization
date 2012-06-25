@@ -2,14 +2,15 @@
 using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using NUnit.Framework;
 using Sekhmet.Serialization.XmlSerializerSupport.Test.Dummies;
-using Xunit;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConformanceTests
 {
+    [TestFixture]
     public class IsNullableTest
     {
-        [Fact]
+        [Test]
         public void TestDeserialize1()
         {
             var serialier = new XmlSerializer(typeof (FooWithIsNullable));
@@ -22,7 +23,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConforman
             Assert.Null(foo.Value);
         }
 
-        [Fact]
+        [Test]
         public void TestDeserialize2()
         {
             var serialier = new XmlSerializer(typeof (FooWithIsNullable));
@@ -38,7 +39,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConforman
             Assert.NotNull(foo.Value);
         }
 
-        [Fact]
+        [Test]
         public void TestSerialize()
         {
             var foo = new FooWithIsNullable();

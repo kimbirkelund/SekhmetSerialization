@@ -2,13 +2,44 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Xunit;
+using NUnit.Framework;
 
 namespace Sekhmet.Serialization.Utility.Test
 {
+    [TestFixture]
     public class ReadWriteLockTest
     {
-        [Fact]
+        [Test]
+        public void TestReadWriteLock_MultipleWrites()
+        {
+            var rwlock = new ReadWriteLock();
+            var random = new Random();
+            int value = 0;
+
+            Action action = () =>
+            {
+                using (rwlock.EnterWriteScope())
+                {
+                    var v = value;
+                    Thread.Sleep(random.Next(10));
+                    var tmp = v + 100;
+                    Thread.Sleep(random.Next(10));
+                    value = tmp;
+                }
+            };
+
+            var tasks = Enumerable.Range(1, 100)
+                .Select(i => Task.Factory.StartNew(action))
+                .ToArray();
+
+            Task.WaitAll(tasks);
+
+            const int expected = 100 * 100;
+
+            Assert.AreEqual(expected, value);
+        }
+
+        [Test]
         public void TestReadWriteLock_NoWriteWhileReading()
         {
             // ReSharper disable AccessToModifiedClosure
@@ -48,14 +79,14 @@ namespace Sekhmet.Serialization.Utility.Test
                 Assert.True(task1.Wait(TimeSpan.FromSeconds(5)));
                 Assert.True(task2.Wait(TimeSpan.FromSeconds(5)));
 
-                Assert.Equal(expected, actual);
+                Assert.AreEqual(expected, actual);
             }
             // ReSharper restore ImplicitlyCapturedClosure
             // ReSharper restore AccessToDisposedClosure
             // ReSharper restore AccessToModifiedClosure
         }
 
-        [Fact]
+        [Test]
         public void TestReadWriteLock_NonConcurrent()
         {
             using (var rwlock = new ReadWriteLock())
@@ -67,36 +98,6 @@ namespace Sekhmet.Serialization.Utility.Test
 
                 rwlock.Dispose();
             }
-        }
-
-        [Fact]
-        public void TestReadWriteLock_MultipleWrites()
-        {
-            var rwlock = new ReadWriteLock();
-            var random = new Random();
-            int value = 0;
-
-            Action action = () =>
-            {
-                using (rwlock.EnterWriteScope())
-                {
-                    var v = value;
-                    Thread.Sleep(random.Next(10));
-                    var tmp = v + 100;
-                    Thread.Sleep(random.Next(10));
-                    value = tmp;
-                }
-            };
-
-            var tasks = Enumerable.Range(1, 100)
-                .Select(i => Task.Factory.StartNew(action))
-                .ToArray();
-
-            Task.WaitAll(tasks);
-
-            var expected = 100 * 100;
-
-            Assert.Equal(expected, value);
         }
     }
 }

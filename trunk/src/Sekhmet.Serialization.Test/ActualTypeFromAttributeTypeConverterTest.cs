@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Xml.Linq;
-using Xunit;
+using NUnit.Framework;
 
 namespace Sekhmet.Serialization.Test
 {
+    [TestFixture]
     public class ActualTypeFromAttributeTypeConverterTest
     {
-        [Fact]
+        [Test]
         public void GetActualType_NonXElementArgument()
         {
             var converter = new ActualTypeFromAttributeTypeConverter();
@@ -14,7 +15,7 @@ namespace Sekhmet.Serialization.Test
             Assert.Null(converter.GetActualType(new XAttribute("type", "bob"), null));
         }
 
-        [Fact]
+        [Test]
         public void GetActualType_NullArguments()
         {
             var converter = new ActualTypeFromAttributeTypeConverter();
@@ -22,17 +23,17 @@ namespace Sekhmet.Serialization.Test
             Assert.Throws<ArgumentNullException>(() => converter.GetActualType(null, null));
         }
 
-        [Fact]
+        [Test]
         public void GetActual_ElementArgumentWithTypeAttribute()
         {
             var converter = new ActualTypeFromAttributeTypeConverter();
 
             var input = new XElement("Elem", new XAttribute("type", typeof (ActualTypeFromAttributeTypeConverterTest).AssemblyQualifiedName));
 
-            Assert.Equal(typeof (ActualTypeFromAttributeTypeConverterTest), converter.GetActualType(input, null));
+            Assert.AreEqual(typeof (ActualTypeFromAttributeTypeConverterTest), converter.GetActualType(input, null));
         }
 
-        [Fact]
+        [Test]
         public void GetActual_ElementArgumentWithoutTypeAttribute()
         {
             var converter = new ActualTypeFromAttributeTypeConverter();

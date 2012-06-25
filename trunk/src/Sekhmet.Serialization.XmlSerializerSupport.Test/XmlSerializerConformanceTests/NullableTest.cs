@@ -2,14 +2,15 @@
 using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using NUnit.Framework;
 using Sekhmet.Serialization.XmlSerializerSupport.Test.Dummies;
-using Xunit;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConformanceTests
 {
+    [TestFixture]
     public class NullableTest
     {
-        [Fact]
+        [Test]
         public void TestSerialize()
         {
             var foo = new Foo {

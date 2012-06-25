@@ -2,13 +2,14 @@
 using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using Xunit;
+using NUnit.Framework;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConformanceTests
 {
+    [TestFixture]
     public class XmlChoiceIdentifierTest
     {
-        [Fact]
+        [Test]
         public void DeserializeObject()
         {
             var ser = new XmlSerializer(typeof(Choices));
@@ -53,7 +54,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConforman
             }
         }
 
-        [Fact]
+        [Test]
         public void SerializeObject()
         {
             var mySerializer = new XmlSerializer(typeof(Choices));

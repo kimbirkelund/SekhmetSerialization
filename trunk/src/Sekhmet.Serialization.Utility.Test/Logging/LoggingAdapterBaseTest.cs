@@ -1,14 +1,15 @@
 ﻿using System;
+using NUnit.Framework;
 using Sekhmet.Serialization.Utility.Logging;
-using Xunit;
 
 namespace Sekhmet.Serialization.Utility.Test.Logging
 {
+    [TestFixture]
     public class LoggingAdapterBaseTest
     {
         public static int DestructorCalls = 0;
 
-        [Fact]
+        [Test]
         public void TestGetLogger_GCed()
         {
             var adapter = new LoggingAdapterStub();
@@ -32,7 +33,7 @@ namespace Sekhmet.Serialization.Utility.Test.Logging
                 GC.WaitForPendingFinalizers();
             }
 
-            Assert.Equal(1, DestructorCalls);
+            Assert.AreEqual(1, DestructorCalls);
 
             Assert.NotNull(adapter.GetLogger("Foo.Bar.Baz"));
         }
@@ -47,22 +48,22 @@ namespace Sekhmet.Serialization.Utility.Test.Logging
         public bool IsWarningEnabled { get; set; }
         public string Name { get; set; }
 
-        public void Debug(string message, Exception exception = null) {}
+        public void Debug(string message, Exception exception = null) { }
 
-        public void Error(string message, Exception exception = null) {}
+        public void Error(string message, Exception exception = null) { }
 
-        public void Fatal(string message, Exception exception = null) {}
+        public void Fatal(string message, Exception exception = null) { }
 
-        public void Info(string message, Exception exception = null) {}
+        public void Info(string message, Exception exception = null) { }
 
         public bool IsEnabled(LogLevel level)
         {
             return false;
         }
 
-        public void Log(LogLevel level, string message, Exception exception = null) {}
+        public void Log(LogLevel level, string message, Exception exception = null) { }
 
-        public void Warning(string message, Exception exception = null) {}
+        public void Warning(string message, Exception exception = null) { }
 
         ~LoggerStub()
         {
@@ -77,6 +78,6 @@ namespace Sekhmet.Serialization.Utility.Test.Logging
             return new LoggerStub();
         }
 
-        protected override void SetLevel(LoggerStub logger, LogLevel level) {}
+        protected override void SetLevel(LoggerStub logger, LogLevel level) { }
     }
 }

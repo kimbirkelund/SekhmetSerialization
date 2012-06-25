@@ -1,27 +1,28 @@
 ﻿using System;
-using Xunit;
+using NUnit.Framework;
 
 namespace Sekhmet.Serialization.Test
 {
+    [TestFixture]
     public class DefaultInstantiatorTest
     {
-        [Fact]
+        [Test]
         public void TestCreate_Failure()
         {
             var instantiator = new DefaultInstantiator();
 
-            Assert.Throws<MissingMethodException>(() => instantiator.Create(typeof(FooWithoutParameterlessConstructor)));
+            Assert.Throws<MissingMethodException>(() => instantiator.Create(typeof (FooWithoutParameterlessConstructor)));
         }
 
-        [Fact]
+        [Test]
         public void TestCreate_Success()
         {
             var instantiator = new DefaultInstantiator();
 
-            var actual = instantiator.Create(typeof(DefaultInstantiatorTest));
+            var actual = instantiator.Create(typeof (DefaultInstantiatorTest));
 
             Assert.NotNull(actual);
-            Assert.IsType(typeof(DefaultInstantiatorTest), actual);
+            Assert.IsInstanceOf(typeof (DefaultInstantiatorTest), actual);
         }
 
         private class FooWithoutParameterlessConstructor

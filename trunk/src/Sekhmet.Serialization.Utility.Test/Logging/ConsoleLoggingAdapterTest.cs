@@ -3,24 +3,25 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using NUnit.Framework;
 using Sekhmet.Serialization.Utility.Logging;
-using Xunit;
 
 namespace Sekhmet.Serialization.Utility.Test.Logging
 {
+    [TestFixture]
     public class ConsoleLoggingAdapterTest
     {
-        [Fact]
+        [Test]
         public void TestGetLogger()
         {
             var adapter = new ConsoleLoggingAdapter();
 
             var logger = adapter.GetLogger();
 
-            Assert.Equal(string.Empty, logger.Name);
+            Assert.AreEqual(string.Empty, logger.Name);
         }
 
-        [Fact]
+        [Test]
         public void TestGetLogger_ForObject()
         {
             var adapter = new ConsoleLoggingAdapter();
@@ -30,18 +31,18 @@ namespace Sekhmet.Serialization.Utility.Test.Logging
 
             string expected = foo.ToString();
 
-            Assert.Equal(expected, logger.Name);
+            Assert.AreEqual(expected, logger.Name);
         }
 
-        [Fact]
+        [Test]
         public void TestGetLogger_ForObject_Null()
         {
             var adapter = new ConsoleLoggingAdapter();
 
-            Assert.Throws<ArgumentNullException>(() => adapter.GetLogger((object)null));
+            Assert.Throws<ArgumentNullException>(() => adapter.GetLogger((object) null));
         }
 
-        [Fact]
+        [Test]
         public void TestGetLogger_ForString_LoggerIsReused()
         {
             var adapter = new ConsoleLoggingAdapter();
@@ -49,10 +50,10 @@ namespace Sekhmet.Serialization.Utility.Test.Logging
             var logger1 = adapter.GetLogger("foo");
             var logger2 = adapter.GetLogger("foo");
 
-            Assert.Same(logger1, logger2);
+            Assert.AreSame(logger1, logger2);
         }
 
-        [Fact]
+        [Test]
         public void TestGetLogger_ForString_LoggerIsReused_Concurrent()
         {
             var adapter = new ConsoleLoggingAdapter();
@@ -61,20 +62,18 @@ namespace Sekhmet.Serialization.Utility.Test.Logging
             var ewhs = new List<EventWaitHandle>();
             var globalEwh = new EventWaitHandle(false, EventResetMode.ManualReset);
             var threads = Enumerable.Range(0, 100)
-                .Select(i =>
-                {
-                    var ewh = new EventWaitHandle(false, EventResetMode.ManualReset);
-                    ewhs.Add(ewh);
+                .Select(i => {
+                            var ewh = new EventWaitHandle(false, EventResetMode.ManualReset);
+                            ewhs.Add(ewh);
 
-                    var thread = new Thread(() =>
-                    {
-                        ewh.Set();
-                        globalEwh.WaitOne();
-                        loggers.Add(adapter.GetLogger("foo"));
-                    });
-                    thread.Start();
-                    return thread;
-                })
+                            var thread = new Thread(() => {
+                                                        ewh.Set();
+                                                        globalEwh.WaitOne();
+                                                        loggers.Add(adapter.GetLogger("foo"));
+                                                    });
+                            thread.Start();
+                            return thread;
+                        })
                 .ToArray();
 
             foreach (var ewh in ewhs)
@@ -85,70 +84,38 @@ namespace Sekhmet.Serialization.Utility.Test.Logging
             foreach (var thread in threads)
                 thread.Join();
 
-            Assert.Equal(1, loggers.GroupBy(l => l).Count());
+            Assert.AreEqual(1, loggers.GroupBy(l => l).Count());
         }
 
-        [Fact]
+        [Test]
         public void TestGetLogger_ForString_Null()
         {
             var adapter = new ConsoleLoggingAdapter();
 
-            Assert.Throws<ArgumentNullException>(() => adapter.GetLogger((string)null));
+            Assert.Throws<ArgumentNullException>(() => adapter.GetLogger((string) null));
         }
 
-        [Fact]
+        [Test]
         public void TestGetLogger_ForType()
         {
             var adapter = new ConsoleLoggingAdapter();
 
-            var logger = adapter.GetLogger(typeof(ConsoleLoggingAdapterTest));
+            var logger = adapter.GetLogger(typeof (ConsoleLoggingAdapterTest));
 
-            string expected = typeof(ConsoleLoggingAdapterTest).FullName;
+            string expected = typeof (ConsoleLoggingAdapterTest).FullName;
 
-            Assert.Equal(expected, logger.Name);
+            Assert.AreEqual(expected, logger.Name);
         }
 
-        [Fact]
+        [Test]
         public void TestGetLogger_ForType_Null()
         {
             var adapter = new ConsoleLoggingAdapter();
 
-            Assert.Throws<ArgumentNullException>(() => adapter.GetLogger((Type)null));
+            Assert.Throws<ArgumentNullException>(() => adapter.GetLogger((Type) null));
         }
 
-        [Fact]
-        public void TestSetLevel_NewLoggers()
-        {
-            var adapter = new ConsoleLoggingAdapter();
-
-            adapter.SetLevel("Foo.Bar.Baz", LogLevel.Info);
-
-            var logger = adapter.GetLogger("Foo.Bar.Baz");
-
-            Assert.False(logger.IsDebugEnabled);
-            Assert.True(logger.IsInfoEnabled);
-            Assert.True(logger.IsWarningEnabled);
-            Assert.True(logger.IsErrorEnabled);
-            Assert.True(logger.IsFatalEnabled);
-
-            logger = adapter.GetLogger("Foo.Bar.Baz.Qut");
-
-            Assert.False(logger.IsDebugEnabled);
-            Assert.True(logger.IsInfoEnabled);
-            Assert.True(logger.IsWarningEnabled);
-            Assert.True(logger.IsErrorEnabled);
-            Assert.True(logger.IsFatalEnabled);
-
-            logger = adapter.GetLogger("Foo.Bar.Ba");
-
-            Assert.False(logger.IsDebugEnabled);
-            Assert.False(logger.IsInfoEnabled);
-            Assert.False(logger.IsWarningEnabled);
-            Assert.False(logger.IsErrorEnabled);
-            Assert.False(logger.IsFatalEnabled);
-        }
-
-        [Fact]
+        [Test]
         public void TestSetLevel_Existing()
         {
             var adapter = new ConsoleLoggingAdapter();
@@ -182,6 +149,38 @@ namespace Sekhmet.Serialization.Utility.Test.Logging
             Assert.True(logger2.IsWarningEnabled);
             Assert.True(logger2.IsErrorEnabled);
             Assert.True(logger2.IsFatalEnabled);
+        }
+
+        [Test]
+        public void TestSetLevel_NewLoggers()
+        {
+            var adapter = new ConsoleLoggingAdapter();
+
+            adapter.SetLevel("Foo.Bar.Baz", LogLevel.Info);
+
+            var logger = adapter.GetLogger("Foo.Bar.Baz");
+
+            Assert.False(logger.IsDebugEnabled);
+            Assert.True(logger.IsInfoEnabled);
+            Assert.True(logger.IsWarningEnabled);
+            Assert.True(logger.IsErrorEnabled);
+            Assert.True(logger.IsFatalEnabled);
+
+            logger = adapter.GetLogger("Foo.Bar.Baz.Qut");
+
+            Assert.False(logger.IsDebugEnabled);
+            Assert.True(logger.IsInfoEnabled);
+            Assert.True(logger.IsWarningEnabled);
+            Assert.True(logger.IsErrorEnabled);
+            Assert.True(logger.IsFatalEnabled);
+
+            logger = adapter.GetLogger("Foo.Bar.Ba");
+
+            Assert.False(logger.IsDebugEnabled);
+            Assert.False(logger.IsInfoEnabled);
+            Assert.False(logger.IsWarningEnabled);
+            Assert.False(logger.IsErrorEnabled);
+            Assert.False(logger.IsFatalEnabled);
         }
 
         private class Foo
