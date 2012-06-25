@@ -4,9 +4,7 @@
     TaskName="Xunit.Runner.MSBuild.xunit"/>
 
   <Target Name="Test">
-    <xunit Assembly="Sekhmet.Serialization.Test\bin\Debug\Sekhmet.Serialization.Test.dll" Xml="Sekhmet.Serialization.Test.dll.xml"/>
-    <xunit Assembly="Sekhmet.Serialization.Utility.Test\bin\Debug\Sekhmet.Serialization.Utility.Test.dll" Xml="Sekhmet.Serialization.Utility.Test.dll.xml"/>
-    <xunit Assembly="Sekhmet.Serialization.XmlSerializerSupport.Test\bin\Debug\Sekhmet.Serialization.XmlSerializerSupport.Test.dll" Xml="Sekhmet.Serialization.XmlSerializerSupport.Test.dll.xml"/>
+    <xunit Assembly="**\*.Test.dll" Xml="TestResults.xml"/>
   </Target>
 
 </Project>
