@@ -10,7 +10,6 @@ namespace Sekhmet.Serialization.Utility.Logging
         private bool _isErrorEnabled;
         private bool _isFatalEnabled;
         private bool _isInfoEnabled;
-        private bool _isTraceEnabled;
         private bool _isWarningEnabled;
 
         public override bool IsDebugEnabled
@@ -31,11 +30,6 @@ namespace Sekhmet.Serialization.Utility.Logging
         public override bool IsInfoEnabled
         {
             get { return _isInfoEnabled; }
-        }
-
-        public override bool IsTraceEnabled
-        {
-            get { return _isTraceEnabled; }
         }
 
         public override bool IsWarningEnabled
@@ -62,9 +56,6 @@ namespace Sekhmet.Serialization.Utility.Logging
             ConsoleColor consoleColor;
             switch (level)
             {
-                case LogLevel.Trace:
-                    consoleColor = ConsoleColor.Gray;
-                    break;
                 case LogLevel.Debug:
                     consoleColor = ConsoleColor.DarkGray;
                     break;
@@ -89,7 +80,6 @@ namespace Sekhmet.Serialization.Utility.Logging
 
         public void SetLevel(LogLevel level)
         {
-            _isTraceEnabled = level <= LogLevel.Trace;
             _isDebugEnabled = level <= LogLevel.Debug;
             _isInfoEnabled = level <= LogLevel.Info;
             _isWarningEnabled = level <= LogLevel.Warning;

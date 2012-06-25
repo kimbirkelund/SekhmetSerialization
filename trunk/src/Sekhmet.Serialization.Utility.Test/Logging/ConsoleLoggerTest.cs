@@ -7,6 +7,12 @@ namespace Sekhmet.Serialization.Utility.Test.Logging
     public class ConsoleLoggerTest
     {
         [Fact]
+        public void TestConstructor_NullArgument()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ConsoleLogger(null));
+        }
+
+        [Fact]
         public void TestDebug()
         {
             var writer = new DummyConsoleWriter();
@@ -21,7 +27,7 @@ namespace Sekhmet.Serialization.Utility.Test.Logging
             Assert.Null(writer.Exception);
             Assert.Equal(default(ConsoleColor), writer.ConsoleColor);
 
-            logger.SetLevel(LogLevel.Trace);
+            logger.SetLevel(LogLevel.Debug);
 
             logger.Debug("Bob", new Exception());
 
@@ -38,34 +44,63 @@ namespace Sekhmet.Serialization.Utility.Test.Logging
         }
 
         [Fact]
-        public void TestTrace()
+        public void TestError()
         {
             var writer = new DummyConsoleWriter();
             var logger = new ConsoleLogger("boo", writer);
 
             Assert.Equal(0, writer.CallCount);
 
-            logger.Trace("Bob", new Exception());
+            logger.Error("Bob", new Exception());
 
             Assert.Equal(0, writer.CallCount);
             Assert.Null(writer.Message);
             Assert.Null(writer.Exception);
             Assert.Equal(default(ConsoleColor), writer.ConsoleColor);
 
-            logger.SetLevel(LogLevel.Trace);
+            logger.SetLevel(LogLevel.Warning);
 
-            logger.Trace("Bob", new Exception());
+            logger.Error("Bob", new Exception());
 
             Assert.Equal(1, writer.CallCount);
-            Assert.Contains("] TRACE: Bob", writer.Message);
+            Assert.Contains("] ERROR: Bob", writer.Message);
             Assert.NotNull(writer.Exception);
-            Assert.Equal(ConsoleColor.Gray, writer.ConsoleColor);
+            Assert.Equal(ConsoleColor.DarkRed, writer.ConsoleColor);
 
-            logger.SetLevel(LogLevel.Debug);
+            logger.SetLevel(LogLevel.Fatal);
 
-            logger.Trace("Bob", new Exception());
+            logger.Error("Bob", new Exception());
 
             Assert.Equal(1, writer.CallCount);
+        }
+
+        [Fact]
+        public void TestFatal()
+        {
+            var writer = new DummyConsoleWriter();
+            var logger = new ConsoleLogger("boo", writer);
+
+            Assert.Equal(0, writer.CallCount);
+
+            logger.Fatal("Bob", new Exception());
+
+            Assert.Equal(0, writer.CallCount);
+            Assert.Null(writer.Message);
+            Assert.Null(writer.Exception);
+            Assert.Equal(default(ConsoleColor), writer.ConsoleColor);
+
+            logger.SetLevel(LogLevel.Error);
+
+            logger.Fatal("Bob", new Exception());
+
+            Assert.Equal(1, writer.CallCount);
+            Assert.Contains("] FATAL: Bob", writer.Message);
+            Assert.NotNull(writer.Exception);
+            Assert.Equal(ConsoleColor.Red, writer.ConsoleColor);
+
+            logger.Fatal("Bob", new Exception());
+
+            Assert.Equal(2, writer.CallCount);
         }
 
         [Fact]
@@ -130,66 +165,6 @@ namespace Sekhmet.Serialization.Utility.Test.Logging
             Assert.Equal(1, writer.CallCount);
         }
 
-        [Fact]
-        public void TestError()
-        {
-            var writer = new DummyConsoleWriter();
-            var logger = new ConsoleLogger("boo", writer);
-
-            Assert.Equal(0, writer.CallCount);
-
-            logger.Error("Bob", new Exception());
-
-            Assert.Equal(0, writer.CallCount);
-            Assert.Null(writer.Message);
-            Assert.Null(writer.Exception);
-            Assert.Equal(default(ConsoleColor), writer.ConsoleColor);
-
-            logger.SetLevel(LogLevel.Warning);
-
-            logger.Error("Bob", new Exception());
-
-            Assert.Equal(1, writer.CallCount);
-            Assert.Contains("] ERROR: Bob", writer.Message);
-            Assert.NotNull(writer.Exception);
-            Assert.Equal(ConsoleColor.DarkRed, writer.ConsoleColor);
-
-            logger.SetLevel(LogLevel.Fatal);
-
-            logger.Error("Bob", new Exception());
-
-            Assert.Equal(1, writer.CallCount);
-        }
-
-        [Fact]
-        public void TestFatal()
-        {
-            var writer = new DummyConsoleWriter();
-            var logger = new ConsoleLogger("boo", writer);
-
-            Assert.Equal(0, writer.CallCount);
-
-            logger.Fatal("Bob", new Exception());
-
-            Assert.Equal(0, writer.CallCount);
-            Assert.Null(writer.Message);
-            Assert.Null(writer.Exception);
-            Assert.Equal(default(ConsoleColor), writer.ConsoleColor);
-
-            logger.SetLevel(LogLevel.Error);
-
-            logger.Fatal("Bob", new Exception());
-
-            Assert.Equal(1, writer.CallCount);
-            Assert.Contains("] FATAL: Bob", writer.Message);
-            Assert.NotNull(writer.Exception);
-            Assert.Equal(ConsoleColor.Red, writer.ConsoleColor);
-
-            logger.Fatal("Bob", new Exception());
-
-            Assert.Equal(2, writer.CallCount);
-        }
-        
         private class DummyConsoleWriter : IConsoleWriter
         {
             public int CallCount { get; private set; }

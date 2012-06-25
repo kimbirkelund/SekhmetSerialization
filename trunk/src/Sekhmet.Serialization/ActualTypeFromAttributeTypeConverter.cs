@@ -19,8 +19,6 @@ namespace Sekhmet.Serialization
         {
             if (source == null)
                 throw new ArgumentNullException("source");
-            if (target == null)
-                throw new ArgumentNullException("target");
 
             if (source.NodeType != XmlNodeType.Element)
                 return null;

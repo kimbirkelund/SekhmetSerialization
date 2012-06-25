@@ -7,13 +7,22 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
     public class XmlSerializerObjectContextFactory : IObjectContextFactory
     {
         private readonly IInstantiator _instantiator;
-        private readonly IObjectContextFactory _recursionFactory;
         private readonly ReadWriteLock _lock = new ReadWriteLock();
         private readonly IDictionary<Type, ObjectContextInfo> _mapActualTypeToContextInfo = new Dictionary<Type, ObjectContextInfo>();
+        private readonly IObjectContextInfoFactory _objectContextInfoFactory;
+        private readonly IObjectContextFactory _recursionFactory;
 
-        public XmlSerializerObjectContextFactory(IInstantiator instantiator, IObjectContextFactory recursionFactory)
+        public XmlSerializerObjectContextFactory(IInstantiator instantiator, IObjectContextInfoFactory objectContextInfoFactory, IObjectContextFactory recursionFactory)
         {
+            if (instantiator == null)
+                throw new ArgumentNullException("instantiator");
+            if (objectContextInfoFactory == null)
+                throw new ArgumentNullException("objectContextInfoFactory");
+            if (recursionFactory == null)
+                throw new ArgumentNullException("recursionFactory");
+
             _instantiator = instantiator;
+            _objectContextInfoFactory = objectContextInfoFactory;
             _recursionFactory = recursionFactory;
         }
 
@@ -40,7 +49,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
 
         private ObjectContextInfo CreateContextInfo(Type actualType)
         {
-            return ObjectContextInfoFactory.Create(_recursionFactory, actualType);
+            return _objectContextInfoFactory.Create(_recursionFactory, actualType);
         }
 
         private ObjectContextInfo GetContextInfo(Type actualType)

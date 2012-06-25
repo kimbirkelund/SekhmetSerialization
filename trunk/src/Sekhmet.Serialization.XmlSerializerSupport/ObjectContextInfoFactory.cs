@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport
 {
-    public static class ObjectContextInfoFactory
+    public class ObjectContextInfoFactory : IObjectContextInfoFactory
     {
-        public static ObjectContextInfo Create(IObjectContextFactory objectContextFactory, Type type)
+        public ObjectContextInfo Create(IObjectContextFactory objectContextFactory, Type type)
         {
-            return new ObjectContextInfo(type, CreateMemberContextInfos(objectContextFactory, type));
+            return new ObjectContextInfo(type, type.GetCustomAttributes(true), CreateMemberContextInfos(objectContextFactory, type));
         }
 
         private static IEnumerable<MemberContextInfo> CreateMemberContextInfos(IObjectContextFactory objectContextFactory, Type actualType)
@@ -19,21 +18,21 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             foreach (var propertyInfo in GetRelevantProperties(actualType))
             {
                 yield return new MemberContextInfo(
-                        propertyInfo.PropertyType,
-                        propertyInfo.Name,
-                        propertyInfo.GetCustomAttributes(true).ToList(),
-                        GetGetter(objectContextFactory, propertyInfo),
-                        GetSetter(propertyInfo));
+                    propertyInfo.PropertyType,
+                    propertyInfo.Name,
+                    propertyInfo.GetCustomAttributes(true).ToList(),
+                    GetGetter(objectContextFactory, propertyInfo),
+                    GetSetter(propertyInfo));
             }
 
             foreach (var fieldInfo in GetRelevantFields(actualType))
             {
                 yield return new MemberContextInfo(
-                        fieldInfo.FieldType,
-                        fieldInfo.Name,
-                        fieldInfo.GetCustomAttributes(true).ToList(),
-                        GetGetter(objectContextFactory, fieldInfo),
-                        GetSetter(fieldInfo));
+                    fieldInfo.FieldType,
+                    fieldInfo.Name,
+                    fieldInfo.GetCustomAttributes(true).ToList(),
+                    GetGetter(objectContextFactory, fieldInfo),
+                    GetSetter(fieldInfo));
             }
         }
 
@@ -47,20 +46,14 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             return c => objectContextFactory.CreateForSerialization(c, propertyInfo.GetValue(c.Target, null));
         }
 
-        private static bool GetMemberHasAttribute<TAttribute>(Type actualType, MemberInfo memberInfo, IEnumerable<object> attrs, Func<bool> validate)
-                where TAttribute : Attribute
+        private static bool GetMemberHasAttribute<TAttribute>(IEnumerable<object> attrs, Func<bool> validate)
+            where TAttribute : Attribute
         {
             if (attrs.OfType<TAttribute>().FirstOrDefault() == null)
                 return false;
 
             if (!validate())
-            {
                 return false;
-                // TODO: Add logging
-                //throw new ArgumentException(
-                //        memberInfo.MemberType + " '" + memberInfo.Name + "' of type '" + actualType.FullName + "' has the '" + typeof(TAttribute).Name
-                //        + "' attribute but is missing either a getter or setter.", "actualType");
-            }
 
             return true;
         }
@@ -77,9 +70,8 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
         {
             return from fieldInfo in actualType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                    let attrs = fieldInfo.GetCustomAttributes(true)
-                   where !attrs.OfType<XmlIgnoreAttribute>().Any()
-                   where GetMemberHasAttribute<XmlAttributeAttribute>(actualType, fieldInfo, attrs, () => !fieldInfo.IsInitOnly)
-                         || GetMemberHasAttribute<XmlElementAttribute>(actualType, fieldInfo, attrs, () => !fieldInfo.IsInitOnly)
+                   where GetMemberHasAttribute<XmlAttributeAttribute>(attrs, () => !fieldInfo.IsInitOnly)
+                         || GetMemberHasAttribute<XmlElementAttribute>(attrs, () => !fieldInfo.IsInitOnly)
                    select fieldInfo;
         }
 
@@ -89,8 +81,8 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                    let attrs = propertyInfo.GetCustomAttributes(true)
                    where !propertyInfo.GetIndexParameters().Any()
                    where GetPropertyHasPublicGetterAndSetter(propertyInfo)
-                         || GetMemberHasAttribute<XmlAttributeAttribute>(actualType, propertyInfo, attrs, () => propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null)
-                         || GetMemberHasAttribute<XmlElementAttribute>(actualType, propertyInfo, attrs, () => propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null)
+                         || GetMemberHasAttribute<XmlAttributeAttribute>(attrs, () => propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null)
+                         || GetMemberHasAttribute<XmlElementAttribute>(attrs, () => propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null)
                    select propertyInfo;
         }
 

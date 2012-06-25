@@ -8,7 +8,6 @@ namespace Sekhmet.Serialization.Utility.Logging
         public abstract bool IsErrorEnabled { get; }
         public abstract bool IsFatalEnabled { get; }
         public abstract bool IsInfoEnabled { get; }
-        public abstract bool IsTraceEnabled { get; }
         public abstract bool IsWarningEnabled { get; }
 
         public virtual void Debug(string message, Exception exception = null)
@@ -35,8 +34,6 @@ namespace Sekhmet.Serialization.Utility.Logging
         {
             switch (level)
             {
-                case LogLevel.Trace:
-                    return IsTraceEnabled;
                 case LogLevel.Debug:
                     return IsDebugEnabled;
                 case LogLevel.Info:
@@ -53,11 +50,6 @@ namespace Sekhmet.Serialization.Utility.Logging
         }
 
         public abstract void Log(LogLevel level, string message, Exception exception = null);
-
-        public virtual void Trace(string message, Exception exception = null)
-        {
-            Log(LogLevel.Trace, message, exception);
-        }
 
         public virtual void Warning(string message, Exception exception = null)
         {

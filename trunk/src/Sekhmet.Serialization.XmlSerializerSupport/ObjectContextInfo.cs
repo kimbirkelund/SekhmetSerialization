@@ -11,15 +11,15 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
         public IEnumerable<object> Attributes { get; private set; }
         public IEnumerable<MemberContextInfo> Members { get; private set; }
 
-        public ObjectContextInfo(Type actualType, IEnumerable<MemberContextInfo> members)
+        public ObjectContextInfo(Type actualType, IEnumerable<object> attributes, IEnumerable<MemberContextInfo> members)
         {
             if (actualType == null)
                 throw new ArgumentNullException("actualType");
             if (members == null)
                 throw new ArgumentNullException("members");
 
-            Attributes = actualType.GetCustomAttributes(true).ToList();
             ActualType = actualType;
+            Attributes = (attributes ?? Enumerable.Empty<object>()).ToList();
             Members = members
                 .OrderBy(m => m.Name)
                 .ToList();
@@ -33,8 +33,8 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
         public IEnumerable<IMemberContext> GetMembers(object target)
         {
             return Members
-                    .Select(m => m.CreateFor(target))
-                    .ToList();
+                .Select(m => m.CreateFor(target))
+                .ToList();
         }
     }
 }

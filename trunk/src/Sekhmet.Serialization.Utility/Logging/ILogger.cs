@@ -8,8 +8,8 @@ namespace Sekhmet.Serialization.Utility.Logging
         bool IsErrorEnabled { get; }
         bool IsFatalEnabled { get; }
         bool IsInfoEnabled { get; }
-        bool IsTraceEnabled { get; }
         bool IsWarningEnabled { get; }
+        string Name { get; }
 
         void Debug(string message, Exception exception = null);
         void Error(string message, Exception exception = null);
@@ -17,7 +17,6 @@ namespace Sekhmet.Serialization.Utility.Logging
         void Info(string message, Exception exception = null);
         bool IsEnabled(LogLevel level);
         void Log(LogLevel level, string message, Exception exception = null);
-        void Trace(string message, Exception exception = null);
         void Warning(string message, Exception exception = null);
     }
 }

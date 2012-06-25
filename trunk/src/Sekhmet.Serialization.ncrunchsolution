@@ -8,5 +8,8 @@
   <FrameworkUtilisationTypeForMSTest>UseStaticAnalysis</FrameworkUtilisationTypeForMSTest>
   <EngineModes>Run all tests automatically:BFRydWU=;Run all tests manually:BUZhbHNl;Run impacted tests automatically, others manually (experimental!):CklzSW1wYWN0ZWQ=;Run pinned tests automatically, others manually:CElzUGlubmVk</EngineModes>
   <MetricsExclusionList>
+Sekhmet.Serialization.Test\Sekhmet.Serialization.Test.csproj
+Sekhmet.Serialization.Utility.Test\Sekhmet.Serialization.Utility.Test.csproj
+Sekhmet.Serialization.XmlSerializerSupport.Test\Sekhmet.Serialization.XmlSerializerSupport.Test.csproj
 </MetricsExclusionList>
 </SolutionConfiguration>

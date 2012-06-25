@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using Sekhmet.Serialization.TestUtility;
 using Sekhmet.Serialization.Utility;
-using Xunit;
 using Xunit.Extensions;
 
-namespace Sekhmet.Serialization.SerializationTestCaseRunner
+namespace Sekhmet.Serialization.TestUtility
 {
-    public class SerializationTest
+    public abstract class TestCaseRunnerTestBase
     {
         public static IEnumerable<object[]> TestSerializationTestCasesData
         {
@@ -39,21 +35,17 @@ namespace Sekhmet.Serialization.SerializationTestCaseRunner
             testCase.AssertCorrectXml(actual);
         }
 
-        [Fact]
-        public void TestToEnsureThatTheTheoriesAreRun() { }
-
         private static IEnumerable<object[]> GetTestCases()
         {
-            return Directory.GetFiles(Environment.CurrentDirectory, "*.dll")
-                    .Select(Assembly.LoadFile)
-                    .SelectMany(a => a.GetTypes())
-                    .Where(t => t.IsSubTypeOf<ISerializationTestCase>())
-                    .Where(t => t.IsClass)
-                    .Where(t => !t.IsAbstract)
-                    .Select(Activator.CreateInstance)
-                    .Cast<ISerializationTestCase>()
-                    .Select(tc => new[] { tc })
-                    .ToList();
+            return AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(a => a.GetTypes())
+                .Where(t => t.IsSubTypeOf<ISerializationTestCase>())
+                .Where(t => t.IsClass)
+                .Where(t => !t.IsAbstract)
+                .Select(Activator.CreateInstance)
+                .Cast<ISerializationTestCase>()
+                .Select(tc => new[] {tc})
+                .ToList();
         }
     }
 }

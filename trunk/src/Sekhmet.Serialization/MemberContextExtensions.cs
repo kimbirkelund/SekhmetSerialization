@@ -16,14 +16,5 @@ namespace Sekhmet.Serialization
 
             return objectContextObject.GetType();
         }
-
-        public static object GetActualValue(this IMemberContext context)
-        {
-            var objectContext = context.GetValue();
-            if (objectContext == null)
-                return null;
-
-            return objectContext.GetObject();
-        }
     }
 }

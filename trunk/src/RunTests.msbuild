@@ -1,0 +1,12 @@
+<Project DefaultTargets="Test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask
+    AssemblyFile="..\lib\xunit\1.9\xunit.runner.msbuild.dll"
+    TaskName="Xunit.Runner.MSBuild.xunit"/>
+
+  <Target Name="Test">
+    <xunit Assembly="Sekhmet.Serialization.Test\bin\Debug\Sekhmet.Serialization.Test.dll" Xml="Sekhmet.Serialization.Test.dll.xml"/>
+    <xunit Assembly="Sekhmet.Serialization.Utility.Test\bin\Debug\Sekhmet.Serialization.Utility.Test.dll" Xml="Sekhmet.Serialization.Utility.Test.dll.xml"/>
+    <xunit Assembly="Sekhmet.Serialization.XmlSerializerSupport.Test\bin\Debug\Sekhmet.Serialization.XmlSerializerSupport.Test.dll" Xml="Sekhmet.Serialization.XmlSerializerSupport.Test.dll.xml"/>
+  </Target>
+
+</Project>

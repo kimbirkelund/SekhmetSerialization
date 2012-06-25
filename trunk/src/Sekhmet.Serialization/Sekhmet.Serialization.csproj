@@ -75,6 +75,10 @@
   <ItemGroup>
     <Compile Include="ActualTypeFromAttributeTypeConverter.cs" />
     <Compile Include="BuiltInCollectionsObjectContextFactory.cs" />
+    <Compile Include="BuiltInCollectionsObjectContextFactory.DeserializationMemberContext.cs" />
+    <Compile Include="BuiltInCollectionsObjectContextFactory.DeserializationObjectContext.cs" />
+    <Compile Include="BuiltInCollectionsObjectContextFactory.SerializationMemberContext.cs" />
+    <Compile Include="BuiltInCollectionsObjectContextFactory.SerializationObjectContext.cs" />
     <Compile Include="BuiltInCollectionsTypeConverter.cs" />
     <Compile Include="CollectionDeserializerSelector.cs" />
     <Compile Include="CollectionSerializerSelector.cs" />
@@ -119,9 +123,7 @@
     <Compile Include="ISerializationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utility\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Sekhmet.Serialization.Utility\Sekhmet.Serialization.Utility.csproj">
       <Project>{58A10A24-70BF-4B70-B444-3029355D29E1}</Project>
