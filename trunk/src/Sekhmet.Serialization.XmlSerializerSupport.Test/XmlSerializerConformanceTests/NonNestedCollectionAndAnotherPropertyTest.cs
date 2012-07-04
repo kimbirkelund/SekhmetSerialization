@@ -12,7 +12,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConforman
     public class NonNestedCollectionAndAnotherPropertyTest
     {
         private readonly XElement _expected = XElement.Parse(@"
-<FooWithNonNestedListAndProperty xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+<FooWithNonNestedListAndProperty>
   <Bar>
     <Value>a</Value>
   </Bar>
@@ -66,6 +66,16 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConforman
             stream.Position = 0;
             var actual = XElement.Load(stream);
 
+            XAttribute attrXsi = actual.Attribute(XName.Get("xsi", "http://www.w3.org/2000/xmlns/"));
+            Assert.NotNull(attrXsi);
+            Assert.AreEqual("http://www.w3.org/2001/XMLSchema-instance", attrXsi.Value);
+            attrXsi.Remove();
+
+            XAttribute attrXsd = actual.Attribute(XName.Get("xsd", "http://www.w3.org/2000/xmlns/"));
+            Assert.NotNull(attrXsd);
+            Assert.AreEqual("http://www.w3.org/2001/XMLSchema", attrXsd.Value);
+            attrXsd.Remove();
+            
             Console.WriteLine("Expected: [" + _expected + "]");
             Console.WriteLine("Actual: [" + actual + "]");
 
