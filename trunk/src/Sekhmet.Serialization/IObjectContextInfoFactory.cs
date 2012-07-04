@@ -1,6 +1,6 @@
 using System;
 
-namespace Sekhmet.Serialization.XmlSerializerSupport
+namespace Sekhmet.Serialization
 {
     public interface IObjectContextInfoFactory
     {

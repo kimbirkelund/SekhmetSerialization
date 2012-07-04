@@ -8,10 +8,11 @@ namespace Sekhmet.Serialization
 {
     public class RecursiveSerializer : ISerializer
     {
+        private readonly IIsNullableStrategy _isNullableStrategy;
         private readonly IMapper _mapper;
         private readonly ISerializerSelector _recursiveSelector;
 
-        public RecursiveSerializer(IMapper mapper, ISerializerSelector recursiveSelector)
+        public RecursiveSerializer(IMapper mapper, ISerializerSelector recursiveSelector, IIsNullableStrategy isNullableStrategy = null)
         {
             if (mapper == null)
                 throw new ArgumentNullException("mapper");
@@ -20,6 +21,7 @@ namespace Sekhmet.Serialization
 
             _mapper = mapper;
             _recursiveSelector = recursiveSelector;
+            _isNullableStrategy = isNullableStrategy ?? new DefaultIsNullableStrategy();
         }
 
         public bool Serialize(IMemberContext source, XObject target)
@@ -31,11 +33,11 @@ namespace Sekhmet.Serialization
 
             var elem = (XElement)target;
 
-            var sourceObject = source.GetValue();
+            IObjectContext sourceObject = source.GetValue();
 
             if (sourceObject == null || sourceObject.GetObject() == null)
             {
-                if (XmlSerializerHelper.IsNullable(source, elem))
+                if (_isNullableStrategy.IsNullable(source, elem))
                 {
                     elem.Add(Constants.XsiNilAttribute);
                     return true;
@@ -44,8 +46,8 @@ namespace Sekhmet.Serialization
                 return false;
             }
 
-            var mappings = _mapper.MapForSerialization(source, elem)
-                    .ToList();
+            List<IMapping<IMemberContext, XObject>> mappings = _mapper.MapForSerialization(source, elem)
+                .ToList();
             if (mappings == null)
                 throw new ArgumentException("Unable to map source '" + source + "' and target '" + target + "'.");
 
@@ -56,13 +58,13 @@ namespace Sekhmet.Serialization
 
         private void SerializeRecursively(XElement targetElement, IEnumerable<IMapping<IMemberContext, XObject>> mappings)
         {
-            foreach (var mapping in mappings)
+            foreach (IMapping<IMemberContext, XObject> mapping in mappings)
             {
-                var serializer = _recursiveSelector.Select(mapping.Source, mapping.Target);
+                ISerializer serializer = _recursiveSelector.Select(mapping.Source, mapping.Target);
                 if (serializer == null)
                     throw new ArgumentException("No serializer could be found for source '" + mapping.Source + "' and target '" + mapping.Target + "'.");
 
-                var shouldAddToTarget = serializer.Serialize(mapping.Source, mapping.Target);
+                bool shouldAddToTarget = serializer.Serialize(mapping.Source, mapping.Target);
 
                 if (mapping.AddTargetToParent && shouldAddToTarget)
                     targetElement.Add(mapping.Target);

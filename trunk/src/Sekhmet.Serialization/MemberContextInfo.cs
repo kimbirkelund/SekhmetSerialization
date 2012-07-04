@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 
-namespace Sekhmet.Serialization.XmlSerializerSupport
+namespace Sekhmet.Serialization
 {
     public class MemberContextInfo
     {
-        private readonly Func<XmlSerializerMemberContext, IObjectContext> _getter;
-        private readonly Action<XmlSerializerMemberContext, IObjectContext> _setter;
+        private readonly Func<MemberContext, IObjectContext> _getter;
+        private readonly Action<MemberContext, IObjectContext> _setter;
 
         public IEnumerable<object> Attributes { get; private set; }
         public string Name { get; private set; }
         public Type Type { get; private set; }
 
-        public MemberContextInfo(Type type, string name, IEnumerable<object> attributes, Func<XmlSerializerMemberContext, IObjectContext> getter, Action<XmlSerializerMemberContext, IObjectContext> setter)
+        public MemberContextInfo(Type type, string name, IEnumerable<object> attributes, Func<MemberContext, IObjectContext> getter, Action<MemberContext, IObjectContext> setter)
         {
             if (type == null)
                 throw new ArgumentNullException("type");
@@ -34,15 +34,15 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
 
         public IMemberContext CreateFor(object target)
         {
-            return new XmlSerializerMemberContext(this, target);
+            return new MemberContext(this, target);
         }
 
-        public IObjectContext GetValue(XmlSerializerMemberContext context)
+        public IObjectContext GetValue(MemberContext context)
         {
             return _getter(context);
         }
 
-        public void SetValue(XmlSerializerMemberContext context, IObjectContext value)
+        public void SetValue(MemberContext context, IObjectContext value)
         {
             _setter(context, value);
         }

@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport
 {
-    public class ObjectContextInfoFactory : IObjectContextInfoFactory
+    public class XmlSerializerObjectContextInfoFactory : IObjectContextInfoFactory
     {
         public ObjectContextInfo Create(IObjectContextFactory objectContextFactory, Type type)
         {
@@ -36,12 +36,12 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             }
         }
 
-        private static Func<XmlSerializerMemberContext, IObjectContext> GetGetter(IObjectContextFactory objectContextFactory, FieldInfo fieldInfo)
+        private static Func<MemberContext, IObjectContext> GetGetter(IObjectContextFactory objectContextFactory, FieldInfo fieldInfo)
         {
             return c => objectContextFactory.CreateForSerialization(c, fieldInfo.GetValue(c.Target));
         }
 
-        private static Func<XmlSerializerMemberContext, IObjectContext> GetGetter(IObjectContextFactory objectContextFactory, PropertyInfo propertyInfo)
+        private static Func<MemberContext, IObjectContext> GetGetter(IObjectContextFactory objectContextFactory, PropertyInfo propertyInfo)
         {
             return c => objectContextFactory.CreateForSerialization(c, propertyInfo.GetValue(c.Target, null));
         }
@@ -86,12 +86,12 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                    select propertyInfo;
         }
 
-        private static Action<XmlSerializerMemberContext, IObjectContext> GetSetter(FieldInfo fieldInfo)
+        private static Action<MemberContext, IObjectContext> GetSetter(FieldInfo fieldInfo)
         {
             return (c, v) => fieldInfo.SetValue(c.Target, v.GetObject());
         }
 
-        private static Action<XmlSerializerMemberContext, IObjectContext> GetSetter(PropertyInfo propertyInfo)
+        private static Action<MemberContext, IObjectContext> GetSetter(PropertyInfo propertyInfo)
         {
             return (c, v) => propertyInfo.SetValue(c.Target, v.GetObject(), null);
         }

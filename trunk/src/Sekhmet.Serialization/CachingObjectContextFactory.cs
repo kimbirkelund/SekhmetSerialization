@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Sekhmet.Serialization.Utility;
 
-namespace Sekhmet.Serialization.XmlSerializerSupport
+namespace Sekhmet.Serialization
 {
-    public class XmlSerializerObjectContextFactory : IObjectContextFactory
+    public class CachingObjectContextFactory : IObjectContextFactory
     {
         private readonly IInstantiator _instantiator;
         private readonly ReadWriteLock _lock = new ReadWriteLock();
@@ -12,7 +12,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
         private readonly IObjectContextInfoFactory _objectContextInfoFactory;
         private readonly IObjectContextFactory _recursionFactory;
 
-        public XmlSerializerObjectContextFactory(IInstantiator instantiator, IObjectContextInfoFactory objectContextInfoFactory, IObjectContextFactory recursionFactory)
+        public CachingObjectContextFactory(IInstantiator instantiator, IObjectContextInfoFactory objectContextInfoFactory, IObjectContextFactory recursionFactory)
         {
             if (instantiator == null)
                 throw new ArgumentNullException("instantiator");

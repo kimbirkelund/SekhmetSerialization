@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace Sekhmet.Serialization.XmlSerializerSupport
+namespace Sekhmet.Serialization
 {
-    public class XmlSerializerObjectContext : IObjectContext
+    public class ObjectContext : IObjectContext
     {
         private readonly ObjectContextInfo _contextInfo;
 
@@ -26,7 +26,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
 
         public object Target { get; private set; }
 
-        public XmlSerializerObjectContext(ObjectContextInfo contextInfo, object target)
+        public ObjectContext(ObjectContextInfo contextInfo, object target)
         {
             if (contextInfo == null)
                 throw new ArgumentNullException("contextInfo");

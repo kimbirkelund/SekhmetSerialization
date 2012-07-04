@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Sekhmet.Serialization.XmlSerializerSupport
+namespace Sekhmet.Serialization
 {
     public class ObjectContextInfo
     {
@@ -27,7 +27,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
 
         public IObjectContext CreateFor(object target)
         {
-            return new XmlSerializerObjectContext(this, target);
+            return new ObjectContext(this, target);
         }
 
         public IEnumerable<IMemberContext> GetMembers(object target)
