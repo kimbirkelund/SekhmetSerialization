@@ -42,7 +42,8 @@ namespace Sekhmet.Serialization.Utility.Logging
                 {
                     if (_loggers.TryGetValue(name, out reference))
                         logger = reference.Target as TLogger;
-                    else
+
+                    if (logger == null)
                     {
                         logger = CreateLogger(name);
                         _loggers[name] = new WeakReference(logger);

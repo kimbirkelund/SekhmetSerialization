@@ -7,7 +7,15 @@ namespace Sekhmet.Serialization.Utility.Test.Logging
     [TestFixture]
     public class LoggingAdapterBaseTest
     {
-        public static int DestructorCalls = 0;
+        public static volatile int ConstructorCalls = 0;
+        public static volatile int DestructorCalls = 0;
+
+        [SetUp]
+        public void SetupTest()
+        {
+            ConstructorCalls = 0;
+            DestructorCalls = 0;
+        }
 
         [Test]
         public void TestGetLogger_GCed()
@@ -15,69 +23,45 @@ namespace Sekhmet.Serialization.Utility.Test.Logging
             var adapter = new LoggingAdapterStub();
             adapter.SetLevel("Foo.Bar.Baz", LogLevel.Info);
 
-            adapter.GetLogger("Foo.Bar.Baz");
+            GetAndAssertNotNull(adapter);
 
-            //while (DestructorCalls == 0)
-            {
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-            }
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
 
+            Assert.AreEqual(1, ConstructorCalls);
             Assert.AreEqual(1, DestructorCalls);
 
+            GetAndAssertNotNull(adapter);
+            Assert.AreEqual(2, ConstructorCalls);
+        }
+
+        [Test]
+        public void TestSimpleInstantiation_GCed()
+        {
+            CreateAndAssertNotNull();
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            Assert.AreEqual(1, ConstructorCalls);
+            Assert.AreEqual(1, DestructorCalls);
+
+            CreateAndAssertNotNull();
+            Assert.AreEqual(2, ConstructorCalls);
+        }
+
+        private static void CreateAndAssertNotNull()
+        {
+            Assert.NotNull(new LoggerStub());
+        }
+
+        private static void GetAndAssertNotNull(LoggingAdapterStub adapter)
+        {
             Assert.NotNull(adapter.GetLogger("Foo.Bar.Baz"));
         }
-    }
-
-    public class LoggerStub : ILogger
-    {
-        public bool IsDebugEnabled { get; set; }
-        public bool IsErrorEnabled { get; set; }
-        public bool IsFatalEnabled { get; set; }
-        public bool IsInfoEnabled { get; set; }
-        public bool IsWarningEnabled { get; set; }
-        public string Name { get; set; }
-
-        public void Debug(string message, Exception exception = null) { }
-
-        public void Error(string message, Exception exception = null) { }
-
-        public void Fatal(string message, Exception exception = null) { }
-
-        public void Info(string message, Exception exception = null) { }
-
-        public bool IsEnabled(LogLevel level)
-        {
-            return false;
-        }
-
-        public void Log(LogLevel level, string message, Exception exception = null) { }
-
-        public void Warning(string message, Exception exception = null) { }
-
-        ~LoggerStub()
-        {
-            LoggingAdapterBaseTest.DestructorCalls++;
-        }
-    }
-
-    public class LoggingAdapterStub : LoggingAdapterBase<LoggerStub>
-    {
-        protected override LoggerStub CreateLogger(string name)
-        {
-            return new LoggerStub();
-        }
-
-        protected override void SetLevel(LoggerStub logger, LogLevel level) { }
     }
 }
