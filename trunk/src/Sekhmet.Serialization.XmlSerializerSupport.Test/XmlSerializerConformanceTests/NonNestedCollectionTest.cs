@@ -12,7 +12,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConforman
     public class NonNestedCollectionTest
     {
         private readonly XElement _expected = XElement.Parse(@"
-<FooWithNonNestedList xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+<FooWithNonNestedList>
   <Bar>
     <Value>a</Value>
   </Bar>
@@ -30,9 +30,9 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConforman
         {
             var xml = _expected;
 
-            var xmlSerializer = new XmlSerializer(typeof (FooWithNonNestedList));
+            var xmlSerializer = new XmlSerializer(typeof(FooWithNonNestedList));
 
-            var foo = (FooWithNonNestedList) xmlSerializer.Deserialize(xml.CreateReader());
+            var foo = (FooWithNonNestedList)xmlSerializer.Deserialize(xml.CreateReader());
 
             Assert.AreEqual(3, foo.Bars.Count);
             Assert.AreEqual("a", foo.Bars[0].Value);
@@ -43,15 +43,16 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConforman
         [Test]
         public void TestSerialize()
         {
-            var foo = new FooWithNonNestedList {
-                                                   Bars = new List<SimpleBar> {
+            var foo = new FooWithNonNestedList
+            {
+                Bars = new List<SimpleBar> {
                                                                                   new SimpleBar {Value = "a"},
                                                                                   new SimpleBar {Value = "b"},
                                                                                   new SimpleBar {Value = "c"}
                                                                               }
-                                               };
+            };
 
-            var xmlSerializer = new XmlSerializer(typeof (FooWithNonNestedList));
+            var xmlSerializer = new XmlSerializer(typeof(FooWithNonNestedList));
 
             var stream = new MemoryStream();
 
@@ -59,7 +60,19 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConforman
 
             stream.Position = 0;
             var actual = XElement.Load(stream);
-            Console.WriteLine(actual);
+
+            XAttribute attrXsi = actual.Attribute(XName.Get("xsi", "http://www.w3.org/2000/xmlns/"));
+            Assert.NotNull(attrXsi);
+            Assert.AreEqual("http://www.w3.org/2001/XMLSchema-instance", attrXsi.Value);
+            attrXsi.Remove();
+
+            XAttribute attrXsd = actual.Attribute(XName.Get("xsd", "http://www.w3.org/2000/xmlns/"));
+            Assert.NotNull(attrXsd);
+            Assert.AreEqual("http://www.w3.org/2001/XMLSchema", attrXsd.Value);
+            attrXsd.Remove();
+
+            Console.WriteLine("Expected: [" + _expected + "]");
+            Console.WriteLine("Actual: [" + actual + "]");
 
             Assert.True(XNode.DeepEquals(_expected, actual));
         }
