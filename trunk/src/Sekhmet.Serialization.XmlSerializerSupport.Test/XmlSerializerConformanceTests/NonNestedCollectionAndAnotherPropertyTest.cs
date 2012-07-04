@@ -65,7 +65,9 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConforman
 
             stream.Position = 0;
             var actual = XElement.Load(stream);
-            Console.WriteLine(actual);
+
+            Console.WriteLine("Expected: [" + _expected + "]");
+            Console.WriteLine("Actual: [" + actual + "]");
 
             Assert.True(XNode.DeepEquals(_expected, actual));
         }
