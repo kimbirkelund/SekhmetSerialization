@@ -1,7 +1,6 @@
 ﻿using System.Xml.Linq;
-using Sekhmet.Serialization.XmlSerializerSupport.Test.Dummies;
 
-namespace Sekhmet.Serialization.XmlSerializerSupport.Test
+namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializable
 {
     public class XmlSerializableTestCase : XmlSerializerSerializationTestCaseBase
     {

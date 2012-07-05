@@ -1,14 +1,13 @@
 using System;
 using System.Xml.Linq;
-using Sekhmet.Serialization.XmlSerializerSupport.Test.Dummies;
 
-namespace Sekhmet.Serialization.XmlSerializerSupport.Test
+namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializableCollectionType
 {
     public class XmlSerializableCollectionTypeTestCase : XmlSerializerSerializationTestCaseBase
     {
         protected override object CreateObject()
         {
-            return new FooWithXmlSerializableList
+            return new Foo
             {
                 List = new XmlSerializableList {
                                                                                          new Bar {
@@ -29,7 +28,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test
 
         protected override XElement CreateXml()
         {
-            return new XElement("FooWithXmlSerializableList",
+            return new XElement("Foo",
                                 Constants.XmlSchemaInstanceNamespaceAttribute,
                                 new XElement("List",
                                              new XElement("Bar",

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
-using Sekhmet.Serialization.XmlSerializerSupport.Test.Dummies;
 
-namespace Sekhmet.Serialization.XmlSerializerSupport.Test
+namespace Sekhmet.Serialization.XmlSerializerSupport.Test.TypeFromAttributeSerializationSupport
 {
     public class TypeFromAttributeSerializationSupportTestCase : XmlSerializerSerializationTestCaseBase
     {
@@ -11,7 +10,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test
 
         protected override object CreateObject()
         {
-            return new FooWithBarBaseWithOutAttributes
+            return new Foo
             {
                 Bar = new Bar2
                 {
@@ -26,7 +25,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test
 
         protected override ISerializationManagerFactory CreateSerializationManager()
         {
-            var manager = base.CreateSerializationManager();
+            ISerializationManagerFactory manager = base.CreateSerializationManager();
             manager.TypeConverter.AddConverter(new ActualTypeFromAttributeTypeConverter());
 
             return manager;

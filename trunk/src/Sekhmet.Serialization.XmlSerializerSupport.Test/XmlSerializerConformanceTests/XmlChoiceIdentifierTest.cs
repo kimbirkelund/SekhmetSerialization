@@ -3,6 +3,7 @@ using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using NUnit.Framework;
+using Sekhmet.Serialization.XmlSerializerSupport.Test.XmlChoiceIdentifier;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConformanceTests
 {

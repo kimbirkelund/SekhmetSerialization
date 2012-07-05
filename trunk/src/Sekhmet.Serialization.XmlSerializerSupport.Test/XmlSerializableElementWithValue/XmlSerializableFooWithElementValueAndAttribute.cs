@@ -1,30 +1,9 @@
-﻿using System.Xml;
-using System.Xml.Linq;
+using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Sekhmet.Serialization.XmlSerializerSupport.Test
+namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializableElementWithValue
 {
-    public class XmlSerializableElementWithValueTestCase : XmlSerializerSerializationTestCaseBase
-    {
-        protected override object CreateObject()
-        {
-            return new XmlSerializableFooWithElementValueAndAttribute
-            {
-                Id = "42",
-                Value = "foo"
-            };
-        }
-
-        protected override XElement CreateXml()
-        {
-            return new XElement("XmlSerializableFooWithElementValueAndAttribute",
-                                Constants.XmlSchemaInstanceNamespaceAttribute,
-                                new XAttribute("id", 42),
-                                "foo");
-        }
-    }
-
     public class XmlSerializableFooWithElementValueAndAttribute : IXmlSerializable
     {
         public string Id { get; set; }

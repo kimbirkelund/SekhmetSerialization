@@ -59,7 +59,7 @@ namespace Sekhmet.Serialization.Test
             yield return decimal.MinValue;
             yield return decimal.MaxValue;
             yield return DateTime.MinValue;
-            yield return DateTime.Now;
+            yield return new DateTime(2012, 7, 5, 13, 57, 38);
             yield return DateTime.MaxValue;
         }
     }
