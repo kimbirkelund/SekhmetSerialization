@@ -8,14 +8,14 @@ namespace Sekhmet.Serialization
         private readonly ISerializer _serializer;
         private readonly BuiltInCollectionsTypeConverter _typeConverter = new BuiltInCollectionsTypeConverter();
 
-        public CollectionSerializerSelector(IMapper mapper, ISerializerSelector recursiveSelector)
+        public CollectionSerializerSelector(IMapper mapper, ISerializerSelector recursiveSelector, IIsNullableStrategy isNullableStrategy = null)
         {
             if (mapper == null)
                 throw new ArgumentNullException("mapper");
             if (recursiveSelector == null)
                 throw new ArgumentNullException("recursiveSelector");
 
-            _serializer = new RecursiveSerializer(mapper, recursiveSelector);
+            _serializer = new RecursiveSerializer(mapper, recursiveSelector, isNullableStrategy);
         }
 
         public ISerializer Select(IMemberContext source, XObject target)

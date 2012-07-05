@@ -7,9 +7,9 @@ namespace Sekhmet.Serialization
     {
         private readonly ISerializer _serializer;
 
-        public RecursiveSerializerSelector(IMapper mapper, ISerializerSelector recursiveSelector)
+        public RecursiveSerializerSelector(IMapper mapper, ISerializerSelector recursiveSelector, IIsNullableStrategy isNullableStrategy = null)
         {
-            _serializer = new RecursiveSerializer(mapper, recursiveSelector);
+            _serializer = new RecursiveSerializer(mapper, recursiveSelector, isNullableStrategy);
         }
 
         public ISerializer Select(IMemberContext source, XObject target)

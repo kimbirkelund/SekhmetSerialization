@@ -43,6 +43,8 @@
     <AssemblyName>Sekhmet.Serialization</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -80,29 +82,35 @@
     <Compile Include="BuiltInCollectionsObjectContextFactory.SerializationMemberContext.cs" />
     <Compile Include="BuiltInCollectionsObjectContextFactory.SerializationObjectContext.cs" />
     <Compile Include="BuiltInCollectionsTypeConverter.cs" />
+    <Compile Include="CachingObjectContextFactory.cs" />
     <Compile Include="CollectionDeserializerSelector.cs" />
     <Compile Include="CollectionSerializerSelector.cs" />
     <Compile Include="CompositeDeserializerSelector.cs" />
     <Compile Include="CompositeObjectContextFactory.cs" />
     <Compile Include="CompositeSerializerSelector.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DefaultIsNullableStrategy.cs" />
     <Compile Include="DefaultSerializationManager.cs" />
     <Compile Include="ICompositeDeserializerSelector.cs" />
     <Compile Include="ICompositeObjectContextFactory.cs" />
     <Compile Include="ICompositeSerializerSelector.cs" />
     <Compile Include="ICompositeTypeConverter.cs" />
+    <Compile Include="IIsNullableStrategy.cs" />
     <Compile Include="IObjectContextFactory.cs" />
+    <Compile Include="IObjectContextInfoFactory.cs" />
     <Compile Include="IRootCreater.cs" />
     <Compile Include="ISerializationManagerFactory.cs" />
     <Compile Include="ISerializer.cs" />
     <Compile Include="ISerializerSelector.cs" />
     <Compile Include="MemberContextExtensions.cs" />
+    <Compile Include="MemberContextInfo.cs" />
+    <Compile Include="ObjectContextInfo.cs" />
     <Compile Include="RecursiveSerializer.cs" />
     <Compile Include="RecursiveSerializerSelector.cs" />
     <Compile Include="SerializationManagerExtensions.cs" />
+    <Compile Include="ValueTypeDeserializerHelper.cs" />
     <Compile Include="ValueTypeSerializer.cs" />
     <Compile Include="ValueTypeSerializerSelector.cs" />
-    <Compile Include="XmlSerializerHelper.cs" />
     <Compile Include="DefaultInstantiator.cs" />
     <Compile Include="IdentityTypeConverter.cs" />
     <Compile Include="RecursiveDeserializer.cs" />
@@ -122,8 +130,18 @@
     <Compile Include="IObjectContext.cs" />
     <Compile Include="ISerializationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ObjectContext.cs" />
+    <Compile Include="MemberContext.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="nuspec.2010.7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="nuspec.2011.8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sekhmet.Serialization.Utility\Sekhmet.Serialization.Utility.csproj">
       <Project>{58A10A24-70BF-4B70-B444-3029355D29E1}</Project>
@@ -131,6 +149,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -6,6 +6,13 @@ namespace Sekhmet.Serialization
 {
     public class ValueTypeSerializer : ISerializer
     {
+        private readonly IIsNullableStrategy _isNullableStrategy;
+
+        public ValueTypeSerializer(IIsNullableStrategy isNullableStrategy = null)
+        {
+            _isNullableStrategy = isNullableStrategy ?? new DefaultIsNullableStrategy();
+        }
+
         public bool Serialize(IMemberContext source, XObject target)
         {
             if (source == null)
@@ -14,7 +21,7 @@ namespace Sekhmet.Serialization
             switch (target.NodeType)
             {
                 case XmlNodeType.Element:
-                    return SerializeToElement(source.GetValue(), (XElement)target, XmlSerializerHelper.IsNullable(source, (XElement)target));
+                    return SerializeToElement(source.GetValue(), (XElement)target, _isNullableStrategy.IsNullable(source, (XElement)target));
                 case XmlNodeType.Attribute:
                     return SerializeToAttribute(source.GetValue(), (XAttribute)target);
                 default:
@@ -24,7 +31,7 @@ namespace Sekhmet.Serialization
 
         private static bool SerializeToAttribute(IObjectContext source, XAttribute target)
         {
-            var sourceObject = source != null ? source.GetObject() : null;
+            object sourceObject = source != null ? source.GetObject() : null;
 
             if (sourceObject == null)
                 return false;
@@ -38,7 +45,7 @@ namespace Sekhmet.Serialization
             if (target.HasElements)
                 throw new ArgumentException("Cannot serialize to an element which has child-elements.");
 
-            var sourceObject = source != null ? source.GetObject() : null;
+            object sourceObject = source != null ? source.GetObject() : null;
 
             if (sourceObject != null)
                 target.SetValue(sourceObject);

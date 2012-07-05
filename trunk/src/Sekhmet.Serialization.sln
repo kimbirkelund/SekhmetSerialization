@@ -15,6 +15,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sekhmet.Serialization.TestU
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sekhmet.Serialization.Utility.Test", "Sekhmet.Serialization.Utility.Test\Sekhmet.Serialization.Utility.Test.csproj", "{26423605-A674-41DD-BFB6-ECE640A9D6CB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E6082B75-AF75-4D18-8D38-C0486AB6C001}"
+	ProjectSection(SolutionItems) = preProject
+		Sekhmet.Serialization.XmlSerializerSupport.nuspec = Sekhmet.Serialization.XmlSerializerSupport.nuspec
+		Sekhmet.Serialization.nuspec = Sekhmet.Serialization.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{985DDEBC-2722-4F87-8A1C-E673109D27F7}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
