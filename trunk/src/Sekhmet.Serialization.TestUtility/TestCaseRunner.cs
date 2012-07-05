@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using NUnit.Framework;
 using Sekhmet.Serialization.Utility;
 
@@ -11,6 +12,12 @@ namespace Sekhmet.Serialization.TestUtility
         public IEnumerable<object[]> TestSerializationTestCasesData
         {
             get { return GetTestCases(); }
+        }
+
+        static TestCaseRunnerTestBase()
+        {
+            log4net.Config.BasicConfigurator.Configure();
+            Common.Logging.LogManager.Adapter = new Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter(new System.Collections.Specialized.NameValueCollection());
         }
 
         [TestCaseSource("TestSerializationTestCasesData")]
@@ -42,7 +49,7 @@ namespace Sekhmet.Serialization.TestUtility
                 .Where(t => !t.IsAbstract)
                 .Select(Activator.CreateInstance)
                 .Cast<ISerializationTestCase>()
-                .Select(tc => new[] {tc})
+                .Select(tc => new[] { tc })
                 .ToList();
         }
     }

@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using Common.Logging;
+using Sekhmet.Serialization.Utility;
 
 namespace Sekhmet.Serialization
 {
     public class RecursiveDeserializer : IDeserializer
     {
+        private static readonly ILog _log = LogManager.GetCurrentClassLogger();
+
         private readonly IMapper _mapper;
         private readonly IObjectContextFactory _objectContextFactory;
         private readonly IDeserializerSelector _recursiveSelector;
@@ -37,6 +41,9 @@ namespace Sekhmet.Serialization
 
             if (source.NodeType != XmlNodeType.Element)
                 throw new ArgumentException("Parameter must be an XML element.", "source");
+
+            if (_log.IsDebugEnabled)
+                _log.Debug("Deserializing " + source.ToFriendlyName() + " into " + target + ".");
 
             var elem = (XElement)source;
 
