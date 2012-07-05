@@ -1,0 +1,3 @@
+Sekhmet.Serialization is a framework for XML (de)serialization. It is provided with support for the built-in .NET XmlSerializer class and related attributes, in the sense that classes using the XMLSerializer attributes can be (de)serialized using the Sekhmet.Serialization.XmlSerializerSupport classes.
+
+See LICENSE for license terms.
