@@ -2,12 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Logging;
 using Sekhmet.Serialization.Utility;
 
 namespace Sekhmet.Serialization
 {
     public partial class BuiltInCollectionsObjectContextFactory : IObjectContextFactory
     {
+        private static readonly ILog _log = LogManager.GetCurrentClassLogger();
+
         private readonly IInstantiator _instantiator;
         private readonly IObjectContextFactory _recursionFactory;
 
@@ -38,6 +41,9 @@ namespace Sekhmet.Serialization
                                      : Enumerable.Empty<object>();
             attributes = attributes.Concat(actualType.GetCustomAttributes(true));
 
+            if (_log.IsDebugEnabled)
+                _log.Debug("Created collection object context for deserialization for '" + actualType + "' for member '" + target + "'.");
+
             return new DeserializationObjectContext(actualType, elementType, list, attributes);
         }
 
@@ -54,6 +60,9 @@ namespace Sekhmet.Serialization
                                      ? source.Attributes
                                      : Enumerable.Empty<object>();
             attributes = attributes.Concat(value.GetType().GetCustomAttributes(true));
+
+            if (_log.IsDebugEnabled)
+                _log.Debug("Created collection object context for serialization for '" + value.GetType() + "' for member '" + source + "'.");
 
             return new SerializationObjectContext(elementType, (IEnumerable)value, attributes, _recursionFactory);
         }

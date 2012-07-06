@@ -1,14 +1,22 @@
 ﻿using System;
+using Common.Logging;
 
 namespace Sekhmet.Serialization
 {
     public class DefaultInstantiator : IInstantiator
     {
+        private static readonly ILog _log = LogManager.GetCurrentClassLogger();
+
         public virtual object Create(Type type)
         {
             try
             {
-                return Activator.CreateInstance(type);
+                var instance = Activator.CreateInstance(type);
+
+                if (_log.IsDebugEnabled)
+                    _log.Debug("Created instance of '" + type + "': " + instance);
+
+                return instance;
             }
             catch (MissingMethodException ex)
             {

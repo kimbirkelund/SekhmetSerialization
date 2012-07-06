@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Xml.Linq;
+using Common.Logging;
+using Sekhmet.Serialization.Utility;
 
 namespace Sekhmet.Serialization
 {
     public class CollectionDeserializerSelector : IDeserializerSelector
     {
+        private static readonly ILog _log = LogManager.GetCurrentClassLogger();
+
         private readonly RecursiveDeserializer _deserializer;
         private readonly BuiltInCollectionsTypeConverter _typeConverter = new BuiltInCollectionsTypeConverter();
 
@@ -22,9 +26,12 @@ namespace Sekhmet.Serialization
 
         public IDeserializer Select(XObject source, IMemberContext target)
         {
-            var actualType = _typeConverter.GetActualType(source, target);
+            Type actualType = _typeConverter.GetActualType(source, target);
             if (actualType == null)
                 return null;
+
+            if (_log.IsDebugEnabled)
+                _log.Debug("Selected collection deserialization for source '" + source.ToFriendlyName() + "' and target '" + target + "'.");
 
             return _deserializer;
         }

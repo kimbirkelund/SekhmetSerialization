@@ -38,17 +38,17 @@ namespace Sekhmet.Serialization
         public IObjectContext CreateForDeserialization(IMemberContext targetMember, Type targetType)
         {
             return Factories
-                    .Select(f => f.CreateForDeserialization(targetMember, targetType))
-                    .Where(d => d != null)
-                    .FirstOrDefault();
+                .Select(f => f.CreateForDeserialization(targetMember, targetType))
+                .Where(d => d != null)
+                .FirstOrDefault();
         }
 
         public IObjectContext CreateForSerialization(IMemberContext sourceMember, object source)
         {
             return Factories
-                    .Select(f => f.CreateForSerialization(sourceMember, source))
-                    .Where(d => d != null)
-                    .FirstOrDefault();
+                .Select(f => f.CreateForSerialization(sourceMember, source))
+                .Where(d => d != null)
+                .FirstOrDefault();
         }
 
         public void RemoveFactory(IObjectContextFactory selector)
