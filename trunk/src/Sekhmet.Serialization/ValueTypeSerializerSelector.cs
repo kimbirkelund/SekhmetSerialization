@@ -9,7 +9,7 @@ namespace Sekhmet.Serialization
     {
         private readonly ValueTypeSerializer _serializer = new ValueTypeSerializer();
 
-        public ISerializer Select(IMemberContext source, XObject target)
+        public ISerializer Select(IMemberContext source, XObject target, IAdviceRequester adviceRequester)
         {
             if (source == null)
                 return null;

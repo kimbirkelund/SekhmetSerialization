@@ -10,7 +10,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
 {
     public class XmlSerializerMapper : IMapper
     {
-        public IEnumerable<IMapping<XObject, IMemberContext>> MapForDeserialization(XElement source, IMemberContext target)
+        public IEnumerable<IMapping<XObject, IMemberContext>> MapForDeserialization(XElement source, IMemberContext target, IAdviceRequester adviceRequester)
         {
             if (source == null)
                 throw new ArgumentNullException("source");
@@ -37,7 +37,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             }
         }
 
-        public IEnumerable<IMapping<IMemberContext, XObject>> MapForSerialization(IMemberContext source, XElement target)
+        public IEnumerable<IMapping<IMemberContext, XObject>> MapForSerialization(IMemberContext source, XElement target, IAdviceRequester adviceRequester)
         {
             if (source == null)
                 throw new ArgumentNullException("source");

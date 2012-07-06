@@ -18,7 +18,7 @@ namespace Sekhmet.Serialization
             _attributeName = attributeName ?? DefaultTypeAttributeName;
         }
 
-        public Type GetActualType(XObject source, IMemberContext target)
+        public Type GetActualType(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
         {
             if (source == null)
                 throw new ArgumentNullException("source");

@@ -7,7 +7,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
 {
     public class XmlSerializerRootCreater : IRootCreater
     {
-        public XElement CreateRoot(IObjectContext source)
+        public XElement CreateRoot(IObjectContext source, IAdviceRequester adviceRequester)
         {
             return new XElement(source.Attributes
                                         .OfType<XmlRootAttribute>()
@@ -17,7 +17,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                                     Constants.XmlSchemaInstanceNamespaceAttribute);
         }
 
-        public void ValidateRoot(XElement source, IObjectContext target)
+        public void ValidateRoot(XElement source, IObjectContext target, IAdviceRequester adviceRequester)
         {
             var expectedRootName = target.Attributes
                                         .OfType<XmlRootAttribute>()

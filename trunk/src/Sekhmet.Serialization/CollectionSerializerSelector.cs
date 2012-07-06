@@ -22,9 +22,9 @@ namespace Sekhmet.Serialization
             _serializer = new RecursiveSerializer(mapper, recursiveSelector, isNullableStrategy);
         }
 
-        public ISerializer Select(IMemberContext source, XObject target)
+        public ISerializer Select(IMemberContext source, XObject target, IAdviceRequester adviceRequester)
         {
-            var actualType = _typeConverter.GetActualType(source.GetActualType());
+            var actualType = _typeConverter.GetActualType(source.GetActualType(), adviceRequester);
             if (actualType == null)
                 return null;
 

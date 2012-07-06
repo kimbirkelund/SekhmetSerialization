@@ -8,12 +8,12 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
 {
     public class XmlSerializerObjectContextInfoFactory : IObjectContextInfoFactory
     {
-        public ObjectContextInfo Create(IObjectContextFactory objectContextFactory, Type type)
+        public ObjectContextInfo Create(IObjectContextFactory objectContextFactory, Type type, IAdviceRequester adviceRequester)
         {
-            return new ObjectContextInfo(type, type.GetCustomAttributes(true), CreateMemberContextInfos(objectContextFactory, type));
+            return new ObjectContextInfo(type, type.GetCustomAttributes(true), CreateMemberContextInfos(objectContextFactory, type, adviceRequester));
         }
 
-        private static IEnumerable<MemberContextInfo> CreateMemberContextInfos(IObjectContextFactory objectContextFactory, Type actualType)
+        private static IEnumerable<MemberContextInfo> CreateMemberContextInfos(IObjectContextFactory objectContextFactory, Type actualType, IAdviceRequester adviceRequester)
         {
             foreach (var propertyInfo in GetRelevantProperties(actualType))
             {
@@ -21,7 +21,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                     propertyInfo.PropertyType,
                     propertyInfo.Name,
                     propertyInfo.GetCustomAttributes(true).ToList(),
-                    GetGetter(objectContextFactory, propertyInfo),
+                    GetGetter(objectContextFactory, propertyInfo, adviceRequester),
                     GetSetter(propertyInfo));
             }
 
@@ -31,19 +31,19 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                     fieldInfo.FieldType,
                     fieldInfo.Name,
                     fieldInfo.GetCustomAttributes(true).ToList(),
-                    GetGetter(objectContextFactory, fieldInfo),
+                    GetGetter(objectContextFactory, fieldInfo, adviceRequester),
                     GetSetter(fieldInfo));
             }
         }
 
-        private static Func<MemberContext, IObjectContext> GetGetter(IObjectContextFactory objectContextFactory, FieldInfo fieldInfo)
+        private static Func<MemberContext, IObjectContext> GetGetter(IObjectContextFactory objectContextFactory, FieldInfo fieldInfo, IAdviceRequester adviceRequester)
         {
-            return c => objectContextFactory.CreateForSerialization(c, fieldInfo.GetValue(c.Target));
+            return c => objectContextFactory.CreateForSerialization(c, fieldInfo.GetValue(c.Target), adviceRequester);
         }
 
-        private static Func<MemberContext, IObjectContext> GetGetter(IObjectContextFactory objectContextFactory, PropertyInfo propertyInfo)
+        private static Func<MemberContext, IObjectContext> GetGetter(IObjectContextFactory objectContextFactory, PropertyInfo propertyInfo, IAdviceRequester adviceRequester)
         {
-            return c => objectContextFactory.CreateForSerialization(c, propertyInfo.GetValue(c.Target, null));
+            return c => objectContextFactory.CreateForSerialization(c, propertyInfo.GetValue(c.Target, null), adviceRequester);
         }
 
         private static bool GetMemberHasAttribute<TAttribute>(IEnumerable<object> attrs, Func<bool> validate)

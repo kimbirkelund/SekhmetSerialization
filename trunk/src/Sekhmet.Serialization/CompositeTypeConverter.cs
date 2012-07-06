@@ -36,10 +36,10 @@ namespace Sekhmet.Serialization
             }
         }
 
-        public Type GetActualType(XObject source, IMemberContext target)
+        public Type GetActualType(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
         {
             return Converters
-                    .Select(c => c.GetActualType(source, target))
+                    .Select(c => c.GetActualType(source, target, adviceRequester))
                     .Where(t => t != null)
                     .FirstOrDefault();
         }

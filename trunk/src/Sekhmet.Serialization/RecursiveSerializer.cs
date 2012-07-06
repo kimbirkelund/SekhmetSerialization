@@ -24,7 +24,7 @@ namespace Sekhmet.Serialization
             _isNullableStrategy = isNullableStrategy ?? new DefaultIsNullableStrategy();
         }
 
-        public bool Serialize(IMemberContext source, XObject target)
+        public bool Serialize(IMemberContext source, XObject target, IAdviceRequester adviceRequester)
         {
             if (source == null)
                 throw new ArgumentNullException("source");
@@ -37,7 +37,7 @@ namespace Sekhmet.Serialization
 
             if (sourceObject == null || sourceObject.GetObject() == null)
             {
-                if (_isNullableStrategy.IsNullable(source, elem))
+                if (_isNullableStrategy.IsNullable(source, elem, adviceRequester))
                 {
                     elem.Add(Constants.XsiNilAttribute);
                     return true;
@@ -46,25 +46,25 @@ namespace Sekhmet.Serialization
                 return false;
             }
 
-            List<IMapping<IMemberContext, XObject>> mappings = _mapper.MapForSerialization(source, elem)
+            List<IMapping<IMemberContext, XObject>> mappings = _mapper.MapForSerialization(source, elem, adviceRequester)
                 .ToList();
             if (mappings == null)
                 throw new ArgumentException("Unable to map source '" + source + "' and target '" + target + "'.");
 
-            SerializeRecursively(elem, mappings);
+            SerializeRecursively(elem, mappings, adviceRequester);
 
             return true;
         }
 
-        private void SerializeRecursively(XElement targetElement, IEnumerable<IMapping<IMemberContext, XObject>> mappings)
+        private void SerializeRecursively(XElement targetElement, IEnumerable<IMapping<IMemberContext, XObject>> mappings, IAdviceRequester adviceRequester)
         {
             foreach (IMapping<IMemberContext, XObject> mapping in mappings)
             {
-                ISerializer serializer = _recursiveSelector.Select(mapping.Source, mapping.Target);
+                ISerializer serializer = _recursiveSelector.Select(mapping.Source, mapping.Target, adviceRequester);
                 if (serializer == null)
                     throw new ArgumentException("No serializer could be found for source '" + mapping.Source + "' and target '" + mapping.Target + "'.");
 
-                bool shouldAddToTarget = serializer.Serialize(mapping.Source, mapping.Target);
+                bool shouldAddToTarget = serializer.Serialize(mapping.Source, mapping.Target, adviceRequester);
 
                 if (mapping.AddTargetToParent && shouldAddToTarget)
                     targetElement.Add(mapping.Target);

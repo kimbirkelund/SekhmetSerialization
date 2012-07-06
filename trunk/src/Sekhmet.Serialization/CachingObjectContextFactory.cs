@@ -26,33 +26,33 @@ namespace Sekhmet.Serialization
             _recursionFactory = recursionFactory;
         }
 
-        public IObjectContext CreateForDeserialization(IMemberContext targetMember, Type targetType)
+        public IObjectContext CreateForDeserialization(IMemberContext targetMember, Type targetType, IAdviceRequester adviceRequester)
         {
-            var contextInfo = GetContextInfo(targetType);
+            ObjectContextInfo contextInfo = GetContextInfo(targetType, adviceRequester);
 
-            var target = _instantiator.Create(targetType);
+            object target = _instantiator.Create(targetType, adviceRequester);
             if (target == null)
                 throw new ArgumentException("Unable to create instance of '" + targetType + "' for member '" + targetMember + "'.");
 
             return contextInfo.CreateFor(target);
         }
 
-        public IObjectContext CreateForSerialization(IMemberContext sourceMember, object source)
+        public IObjectContext CreateForSerialization(IMemberContext sourceMember, object source, IAdviceRequester adviceRequester)
         {
             if (source == null)
                 return null;
 
-            var contextInfo = GetContextInfo(source.GetType());
+            ObjectContextInfo contextInfo = GetContextInfo(source.GetType(), adviceRequester);
 
             return contextInfo.CreateFor(source);
         }
 
-        private ObjectContextInfo CreateContextInfo(Type actualType)
+        private ObjectContextInfo CreateContextInfo(Type actualType, IAdviceRequester adviceRequester)
         {
-            return _objectContextInfoFactory.Create(_recursionFactory, actualType);
+            return _objectContextInfoFactory.Create(_recursionFactory, actualType, adviceRequester);
         }
 
-        private ObjectContextInfo GetContextInfo(Type actualType)
+        private ObjectContextInfo GetContextInfo(Type actualType, IAdviceRequester adviceRequester)
         {
             ObjectContextInfo contextInfo;
             using (_lock.EnterReadScope())
@@ -63,7 +63,7 @@ namespace Sekhmet.Serialization
                 using (_lock.EnterWriteScope())
                 {
                     if (!_mapActualTypeToContextInfo.TryGetValue(actualType, out contextInfo))
-                        _mapActualTypeToContextInfo[actualType] = contextInfo = CreateContextInfo(actualType);
+                        _mapActualTypeToContextInfo[actualType] = contextInfo = CreateContextInfo(actualType, adviceRequester);
                 }
             }
 

@@ -7,7 +7,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
 {
     public class XmlSerializerTypeConverter : ITypeConverter
     {
-        public Type GetActualType(XObject source, IMemberContext target)
+        public Type GetActualType(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
         {
             return GetActualTypeFromXmlAttributeAttribute(source as XAttribute, target)
                    ?? GetActualTypeFromXmlElementAttribute(source as XElement, target)

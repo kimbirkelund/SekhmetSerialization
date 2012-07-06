@@ -22,14 +22,14 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             _typeConverter = typeConverter;
         }
 
-        public IDeserializer Select(XObject source, IMemberContext target)
+        public IDeserializer Select(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
         {
             if (source == null)
                 return null;
             if (source.NodeType != XmlNodeType.Element)
                 return null;
 
-            var actualType = _typeConverter.GetActualType(source, target);
+            var actualType = _typeConverter.GetActualType(source, target, adviceRequester);
             if (actualType == null)
                 return null;
 

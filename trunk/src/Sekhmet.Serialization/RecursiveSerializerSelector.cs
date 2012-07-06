@@ -12,7 +12,7 @@ namespace Sekhmet.Serialization
             _serializer = new RecursiveSerializer(mapper, recursiveSelector, isNullableStrategy);
         }
 
-        public ISerializer Select(IMemberContext source, XObject target)
+        public ISerializer Select(IMemberContext source, XObject target, IAdviceRequester adviceRequester)
         {
             if (target.NodeType != XmlNodeType.Element)
                 return null;

@@ -10,7 +10,7 @@ namespace Sekhmet.Serialization
     {
         private static readonly ILog _log = LogManager.GetCurrentClassLogger();
 
-        public Type GetActualType(Type type)
+        public Type GetActualType(Type type, IAdviceRequester adviceRequester)
         {
             Type result = null;
 
@@ -43,9 +43,9 @@ namespace Sekhmet.Serialization
             return result;
         }
 
-        public Type GetActualType(XObject source, IMemberContext target)
+        public Type GetActualType(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
         {
-            return GetActualType(target.ContractType);
+            return GetActualType(target.ContractType, adviceRequester);
         }
     }
 }

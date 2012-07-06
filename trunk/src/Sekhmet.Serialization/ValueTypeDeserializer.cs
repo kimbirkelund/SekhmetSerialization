@@ -18,7 +18,7 @@ namespace Sekhmet.Serialization
             _helper = helper ?? new ValueTypeDeserializerHelper();
         }
 
-        public void Deserialize(XObject source, IMemberContext target)
+        public void Deserialize(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
         {
             if (source == null)
                 return;

@@ -7,7 +7,7 @@ namespace Sekhmet.Serialization
     {
         private static readonly ILog _log = LogManager.GetCurrentClassLogger();
 
-        public virtual object Create(Type type)
+        public virtual object Create(Type type, IAdviceRequester adviceRequester)
         {
             try
             {

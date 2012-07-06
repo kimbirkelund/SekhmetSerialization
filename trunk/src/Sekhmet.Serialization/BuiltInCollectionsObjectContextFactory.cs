@@ -25,7 +25,7 @@ namespace Sekhmet.Serialization
             _instantiator = instantiator;
         }
 
-        public IObjectContext CreateForDeserialization(IMemberContext target, Type actualType)
+        public IObjectContext CreateForDeserialization(IMemberContext target, Type actualType, IAdviceRequester adviceRequester)
         {
             if (actualType == null)
                 return null;
@@ -34,7 +34,7 @@ namespace Sekhmet.Serialization
             if (elementType == null)
                 return null;
 
-            var list = CreateInstance(actualType);
+            var list = CreateInstance(actualType, adviceRequester);
 
             var attributes = target != null
                                      ? target.Attributes
@@ -47,7 +47,7 @@ namespace Sekhmet.Serialization
             return new DeserializationObjectContext(actualType, elementType, list, attributes);
         }
 
-        public IObjectContext CreateForSerialization(IMemberContext source, object value)
+        public IObjectContext CreateForSerialization(IMemberContext source, object value, IAdviceRequester adviceRequester)
         {
             if (value == null)
                 return null;
@@ -64,15 +64,15 @@ namespace Sekhmet.Serialization
             if (_log.IsDebugEnabled)
                 _log.Debug("Created collection object context for serialization for '" + value.GetType() + "' for member '" + source + "'.");
 
-            return new SerializationObjectContext(elementType, (IEnumerable)value, attributes, _recursionFactory);
+            return new SerializationObjectContext(elementType, (IEnumerable)value, attributes, _recursionFactory, adviceRequester);
         }
 
-        private object CreateInstance(Type actualType)
+        private object CreateInstance(Type actualType, IAdviceRequester adviceRequester)
         {
             if (actualType.IsArray)
-                return _instantiator.Create(typeof(List<>).MakeGenericType(actualType.GetElementType()));
+                return _instantiator.Create(typeof(List<>).MakeGenericType(actualType.GetElementType()), adviceRequester);
 
-            return _instantiator.Create(actualType);
+            return _instantiator.Create(actualType, adviceRequester);
         }
 
         private static Type GetElementTypeForDeserialization(Type type)

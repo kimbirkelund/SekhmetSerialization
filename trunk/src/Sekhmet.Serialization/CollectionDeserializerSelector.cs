@@ -24,9 +24,9 @@ namespace Sekhmet.Serialization
             _deserializer = new RecursiveDeserializer(mapper, recursiveSelector, objectContextFactory, _typeConverter);
         }
 
-        public IDeserializer Select(XObject source, IMemberContext target)
+        public IDeserializer Select(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
         {
-            Type actualType = _typeConverter.GetActualType(source, target);
+            Type actualType = _typeConverter.GetActualType(source, target, adviceRequester);
             if (actualType == null)
                 return null;
 

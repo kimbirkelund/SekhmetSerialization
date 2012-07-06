@@ -4,6 +4,6 @@ namespace Sekhmet.Serialization
 {
     public interface IObjectContextInfoFactory
     {
-        ObjectContextInfo Create(IObjectContextFactory objectContextFactory, Type type);
+        ObjectContextInfo Create(IObjectContextFactory objectContextFactory, Type type, IAdviceRequester adviceRequester);
     }
 }

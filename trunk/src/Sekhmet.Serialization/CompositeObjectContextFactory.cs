@@ -35,18 +35,18 @@ namespace Sekhmet.Serialization
             }
         }
 
-        public IObjectContext CreateForDeserialization(IMemberContext targetMember, Type targetType)
+        public IObjectContext CreateForDeserialization(IMemberContext targetMember, Type targetType, IAdviceRequester adviceRequester)
         {
             return Factories
-                .Select(f => f.CreateForDeserialization(targetMember, targetType))
+                .Select(f => f.CreateForDeserialization(targetMember, targetType, adviceRequester))
                 .Where(d => d != null)
                 .FirstOrDefault();
         }
 
-        public IObjectContext CreateForSerialization(IMemberContext sourceMember, object source)
+        public IObjectContext CreateForSerialization(IMemberContext sourceMember, object source, IAdviceRequester adviceRequester)
         {
             return Factories
-                .Select(f => f.CreateForSerialization(sourceMember, source))
+                .Select(f => f.CreateForSerialization(sourceMember, source, adviceRequester))
                 .Where(d => d != null)
                 .FirstOrDefault();
         }

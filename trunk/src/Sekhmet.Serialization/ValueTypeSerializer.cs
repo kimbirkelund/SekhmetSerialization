@@ -13,7 +13,7 @@ namespace Sekhmet.Serialization
             _isNullableStrategy = isNullableStrategy ?? new DefaultIsNullableStrategy();
         }
 
-        public bool Serialize(IMemberContext source, XObject target)
+        public bool Serialize(IMemberContext source, XObject target, IAdviceRequester adviceRequester)
         {
             if (source == null)
                 throw new ArgumentNullException("source");
@@ -21,7 +21,7 @@ namespace Sekhmet.Serialization
             switch (target.NodeType)
             {
                 case XmlNodeType.Element:
-                    return SerializeToElement(source.GetValue(), (XElement)target, _isNullableStrategy.IsNullable(source, (XElement)target));
+                    return SerializeToElement(source.GetValue(), (XElement)target, _isNullableStrategy.IsNullable(source, (XElement)target, adviceRequester));
                 case XmlNodeType.Attribute:
                     return SerializeToAttribute(source.GetValue(), (XAttribute)target);
                 default:

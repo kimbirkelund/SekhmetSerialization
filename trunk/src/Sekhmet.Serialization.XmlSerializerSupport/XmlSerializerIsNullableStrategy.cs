@@ -7,9 +7,9 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
 {
     public class XmlSerializerIsNullableStrategy : DefaultIsNullableStrategy
     {
-        public override bool IsNullable(IMemberContext source, XElement target)
+        public override bool IsNullable(IMemberContext source, XElement target, IAdviceRequester adviceRequester)
         {
-            if (base.IsNullable(source, target))
+            if (base.IsNullable(source, target, adviceRequester))
                 return true;
 
             List<XmlElementAttribute> xmlElementAttrs = source.Attributes

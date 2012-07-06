@@ -11,9 +11,9 @@ namespace Sekhmet.Serialization
         private readonly IDictionary<Type, ValueTypeDeserializer> _deserializers = new Dictionary<Type, ValueTypeDeserializer>();
         private readonly ReadWriteLock _lock = new ReadWriteLock();
 
-        public virtual IDeserializer Select(XObject source, IMemberContext target)
+        public virtual IDeserializer Select(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
         {
-            return Select(source, target, target.ContractType);
+            return Select(source, target, target.ContractType, adviceRequester);
         }
 
         protected IDeserializer GetDeserializer(Type contractType)
@@ -34,7 +34,7 @@ namespace Sekhmet.Serialization
             return deserializer;
         }
 
-        protected virtual IDeserializer Select(XObject source, IMemberContext target, Type type)
+        protected virtual IDeserializer Select(XObject source, IMemberContext target, Type type, IAdviceRequester adviceRequester)
         {
             var typeCode = Type.GetTypeCode(type);
 

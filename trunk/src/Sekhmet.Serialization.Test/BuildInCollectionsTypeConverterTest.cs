@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Moq;
 using NUnit.Framework;
 
 namespace Sekhmet.Serialization.Test
@@ -28,7 +29,7 @@ namespace Sekhmet.Serialization.Test
 
         private static void DoTest(BuiltInCollectionsTypeConverter converter, Type expectedType, Type input)
         {
-            var actualType = converter.GetActualType(input);
+            var actualType = converter.GetActualType(input, new Mock<IAdviceRequester>().Object);
 
             Assert.AreEqual(expectedType, actualType);
         }

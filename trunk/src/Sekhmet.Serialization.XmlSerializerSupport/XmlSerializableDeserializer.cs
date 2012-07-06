@@ -21,11 +21,11 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             _typeConverter = typeConverter;
         }
 
-        public void Deserialize(XObject source, IMemberContext target)
+        public void Deserialize(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
         {
-            var targetType = _typeConverter.GetActualType(source, target);
+            var targetType = _typeConverter.GetActualType(source, target, adviceRequester);
 
-            var targetObject = _objectContextFactory.CreateForDeserialization(target, targetType);
+            var targetObject = _objectContextFactory.CreateForDeserialization(target, targetType, adviceRequester);
             if (targetObject == null)
                 throw new ArgumentException("Unable to create target object for source '" + source + "' and target '" + target + "'.");
 

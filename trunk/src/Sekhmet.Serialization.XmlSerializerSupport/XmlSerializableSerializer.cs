@@ -10,7 +10,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
 {
     public class XmlSerializableSerializer : ISerializer
     {
-        public bool Serialize(IMemberContext source, XObject target)
+        public bool Serialize(IMemberContext source, XObject target, IAdviceRequester adviceRequester)
         {
             if (source == null)
                 throw new ArgumentNullException("source");

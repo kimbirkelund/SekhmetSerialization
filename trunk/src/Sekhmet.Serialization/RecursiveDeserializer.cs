@@ -34,7 +34,7 @@ namespace Sekhmet.Serialization
             _typeConverter = typeConverter;
         }
 
-        public void Deserialize(XObject source, IMemberContext target)
+        public void Deserialize(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
         {
             if (source == null)
                 return;
@@ -47,31 +47,31 @@ namespace Sekhmet.Serialization
 
             var elem = (XElement)source;
 
-            var targetType = _typeConverter.GetActualType(source, target);
+            Type targetType = _typeConverter.GetActualType(source, target, adviceRequester);
             if (targetType == null)
                 throw new ArgumentException("Unable to get target type for target '" + target + "'.");
 
-            var targetObject = _objectContextFactory.CreateForDeserialization(target, targetType);
+            IObjectContext targetObject = _objectContextFactory.CreateForDeserialization(target, targetType, adviceRequester);
             if (targetObject == null)
                 throw new ArgumentException("Unable to create target object for target '" + target + "'.");
 
             target.SetValue(targetObject);
 
-            var mappings = _mapper.MapForDeserialization(elem, target)
+            List<IMapping<XObject, IMemberContext>> mappings = _mapper.MapForDeserialization(elem, target, adviceRequester)
                 .ToList();
             if (mappings == null)
                 throw new ArgumentException("Unable to map source '" + source + "' and target '" + target + "'.");
 
-            DeserializeRecursively(mappings);
+            DeserializeRecursively(mappings, adviceRequester);
 
             target.CommitChanges();
         }
 
-        private void DeserializeRecursively(IEnumerable<IMapping<XObject, IMemberContext>> mappings)
+        private void DeserializeRecursively(IEnumerable<IMapping<XObject, IMemberContext>> mappings, IAdviceRequester adviceRequester)
         {
-            foreach (var mapping in mappings)
+            foreach (IMapping<XObject, IMemberContext> mapping in mappings)
             {
-                var deserializer = _recursiveSelector.Select(mapping.Source, mapping.Target);
+                IDeserializer deserializer = _recursiveSelector.Select(mapping.Source, mapping.Target, adviceRequester);
 
                 if (deserializer == null && mapping.Source == null)
                     continue;
@@ -79,7 +79,7 @@ namespace Sekhmet.Serialization
                 if (deserializer == null)
                     throw new ArgumentException("No deserializer could be found for source '" + mapping.Source + "' and target '" + mapping.Target + "'.");
 
-                deserializer.Deserialize(mapping.Source, mapping.Target);
+                deserializer.Deserialize(mapping.Source, mapping.Target, adviceRequester);
             }
         }
     }

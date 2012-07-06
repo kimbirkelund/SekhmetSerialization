@@ -41,10 +41,10 @@ namespace Sekhmet.Serialization
                 _selectors.Remove(selector);
         }
 
-        public ISerializer Select(IMemberContext source, XObject target)
+        public ISerializer Select(IMemberContext source, XObject target, IAdviceRequester adviceRequester)
         {
             return Selectors
-                    .Select(s => s.Select(source, target))
+                    .Select(s => s.Select(source, target, adviceRequester))
                     .Where(d => d != null)
                     .FirstOrDefault();
         }

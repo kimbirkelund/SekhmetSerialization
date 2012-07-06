@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Linq;
+using Moq;
 using NUnit.Framework;
 
 namespace Sekhmet.Serialization.Test
@@ -12,7 +13,7 @@ namespace Sekhmet.Serialization.Test
         {
             var converter = new ActualTypeFromAttributeTypeConverter();
 
-            Assert.Null(converter.GetActualType(new XAttribute("type", "bob"), null));
+            Assert.Null(converter.GetActualType(new XAttribute("type", "bob"), null, new Mock<IAdviceRequester>().Object));
         }
 
         [Test]
@@ -20,7 +21,7 @@ namespace Sekhmet.Serialization.Test
         {
             var converter = new ActualTypeFromAttributeTypeConverter();
 
-            Assert.Throws<ArgumentNullException>(() => converter.GetActualType(null, null));
+            Assert.Throws<ArgumentNullException>(() => converter.GetActualType(null, null, new Mock<IAdviceRequester>().Object));
         }
 
         [Test]
@@ -30,7 +31,7 @@ namespace Sekhmet.Serialization.Test
 
             var input = new XElement("Elem", new XAttribute("type", typeof (ActualTypeFromAttributeTypeConverterTest).AssemblyQualifiedName));
 
-            Assert.AreEqual(typeof (ActualTypeFromAttributeTypeConverterTest), converter.GetActualType(input, null));
+            Assert.AreEqual(typeof(ActualTypeFromAttributeTypeConverterTest), converter.GetActualType(input, null, new Mock<IAdviceRequester>().Object));
         }
 
         [Test]
@@ -38,7 +39,7 @@ namespace Sekhmet.Serialization.Test
         {
             var converter = new ActualTypeFromAttributeTypeConverter();
 
-            Assert.Null(converter.GetActualType(new XElement("Elem"), null));
+            Assert.Null(converter.GetActualType(new XElement("Elem"), null, new Mock<IAdviceRequester>().Object));
         }
     }
 }

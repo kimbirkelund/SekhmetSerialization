@@ -5,11 +5,7 @@ namespace Sekhmet.Serialization.Test
 {
     public class SerializationManagerStub : ISerializationManager
     {
-        public int DeserializeCallCount { get; private set; }
-        public XElement DeserializeSource { get; private set; }
-        public Type DeserializeTargetType { get; private set; }
-        public int SerializeCallCount { get; private set; }
-        public object SerializeSource { get; private set; }
+        public void AddAdvisor(EventHandler<AdviceRequestedEventArgs> advisor, params AdviceType[] types) { }
 
         public object Deserialize(XElement source, Type targetType)
         {
@@ -20,6 +16,12 @@ namespace Sekhmet.Serialization.Test
             return Activator.CreateInstance(targetType);
         }
 
+        public int DeserializeCallCount { get; private set; }
+        public XElement DeserializeSource { get; private set; }
+        public Type DeserializeTargetType { get; private set; }
+
+        public void RemoveAdvisor(EventHandler<AdviceRequestedEventArgs> advisor, params AdviceType[] types) { }
+
         public XElement Serialize(object source)
         {
             SerializeSource = source;
@@ -27,5 +29,8 @@ namespace Sekhmet.Serialization.Test
 
             return new XElement("element");
         }
+
+        public int SerializeCallCount { get; private set; }
+        public object SerializeSource { get; private set; }
     }
 }

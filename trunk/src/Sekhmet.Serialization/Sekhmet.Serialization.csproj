@@ -79,6 +79,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActualTypeFromAttributeTypeConverter.cs" />
+    <Compile Include="AdviceRequestedEventArgs.cs" />
+    <Compile Include="AdviceType.cs" />
     <Compile Include="BuiltInCollectionsObjectContextFactory.cs" />
     <Compile Include="BuiltInCollectionsObjectContextFactory.DeserializationMemberContext.cs" />
     <Compile Include="BuiltInCollectionsObjectContextFactory.DeserializationObjectContext.cs" />
@@ -88,12 +90,15 @@
     <Compile Include="CachingObjectContextFactory.cs" />
     <Compile Include="CollectionDeserializerSelector.cs" />
     <Compile Include="CollectionSerializerSelector.cs" />
+    <Compile Include="CommonAdvisorTypes.cs" />
     <Compile Include="CompositeDeserializerSelector.cs" />
     <Compile Include="CompositeObjectContextFactory.cs" />
     <Compile Include="CompositeSerializerSelector.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DefaultAdviceRequester.cs" />
     <Compile Include="DefaultIsNullableStrategy.cs" />
     <Compile Include="DefaultSerializationManager.cs" />
+    <Compile Include="IAdviceRequester.cs" />
     <Compile Include="ICompositeDeserializerSelector.cs" />
     <Compile Include="ICompositeObjectContextFactory.cs" />
     <Compile Include="ICompositeSerializerSelector.cs" />
@@ -110,6 +115,7 @@
     <Compile Include="ObjectContextInfo.cs" />
     <Compile Include="RecursiveSerializer.cs" />
     <Compile Include="RecursiveSerializerSelector.cs" />
+    <Compile Include="SerializationManagerBase.cs" />
     <Compile Include="SerializationManagerExtensions.cs" />
     <Compile Include="ValueTypeDeserializerHelper.cs" />
     <Compile Include="ValueTypeSerializer.cs" />

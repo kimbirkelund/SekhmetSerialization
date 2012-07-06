@@ -13,7 +13,7 @@ namespace Sekhmet.Serialization
             return type;
         }
 
-        public Type GetActualType(XObject source, IMemberContext target)
+        public Type GetActualType(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
         {
             return GetActualType(target.ContractType);
         }

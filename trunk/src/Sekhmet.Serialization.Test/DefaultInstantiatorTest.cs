@@ -1,4 +1,5 @@
 ﻿using System;
+using Moq;
 using NUnit.Framework;
 
 namespace Sekhmet.Serialization.Test
@@ -11,7 +12,7 @@ namespace Sekhmet.Serialization.Test
         {
             var instantiator = new DefaultInstantiator();
 
-            Assert.Throws<MissingMethodException>(() => instantiator.Create(typeof (FooWithoutParameterlessConstructor)));
+            Assert.Throws<MissingMethodException>(() => instantiator.Create(typeof(FooWithoutParameterlessConstructor), new Mock<IAdviceRequester>().Object));
         }
 
         [Test]
@@ -19,10 +20,10 @@ namespace Sekhmet.Serialization.Test
         {
             var instantiator = new DefaultInstantiator();
 
-            var actual = instantiator.Create(typeof (DefaultInstantiatorTest));
+            var actual = instantiator.Create(typeof(DefaultInstantiatorTest), new Mock<IAdviceRequester>().Object);
 
             Assert.NotNull(actual);
-            Assert.IsInstanceOf(typeof (DefaultInstantiatorTest), actual);
+            Assert.IsInstanceOf(typeof(DefaultInstantiatorTest), actual);
         }
 
         private class FooWithoutParameterlessConstructor

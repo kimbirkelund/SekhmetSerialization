@@ -7,13 +7,13 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
 {
     public class XmlSerializerValueTypeDeserializerSelector : ValueTypeDeserializerSelector
     {
-        public override IDeserializer Select(XObject source, IMemberContext target)
+        public override IDeserializer Select(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
         {
             var contractTypeFromAttr = GetContractTypeFromAttributes(source, target);
             if (contractTypeFromAttr == null)
                 return null;
 
-            return Select(source, target, contractTypeFromAttr);
+            return Select(source, target, contractTypeFromAttr, adviceRequester);
         }
 
         private static Type GetContractTypeFromAttributes(XObject source, IMemberContext target)

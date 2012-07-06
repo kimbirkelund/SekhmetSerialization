@@ -24,23 +24,23 @@ namespace Sekhmet.Serialization
             _deserializer = new RecursiveDeserializer(mapper, recursiveSelector, objectContextFactory, typeConverter);
         }
 
-        public IDeserializer Select(XObject source, IMemberContext target)
+        public IDeserializer Select(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
         {
             if (source == null)
                 return null;
             if (source.NodeType != XmlNodeType.Element)
                 return null;
 
-            var actualType = GetActualType(target, source);
+            var actualType = GetActualType(target, source, adviceRequester);
             if (actualType == null)
                 return null;
 
             return _deserializer;
         }
 
-        private Type GetActualType(IMemberContext target, XObject source)
+        private Type GetActualType(IMemberContext target, XObject source, IAdviceRequester adviceRequester)
         {
-            return _typeConverter.GetActualType(source, target);
+            return _typeConverter.GetActualType(source, target, adviceRequester);
         }
     }
 }

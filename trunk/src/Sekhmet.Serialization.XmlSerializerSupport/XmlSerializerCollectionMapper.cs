@@ -24,7 +24,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
     /// </remarks>
     public class XmlSerializerCollectionMapper : IMapper
     {
-        public IEnumerable<IMapping<XObject, IMemberContext>> MapForDeserialization(XElement source, IMemberContext target)
+        public IEnumerable<IMapping<XObject, IMemberContext>> MapForDeserialization(XElement source, IMemberContext target, IAdviceRequester adviceRequester)
         {
             var targetObject = target.GetValue();
             if (targetObject == null)
@@ -38,7 +38,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                     .ToList();
         }
 
-        public IEnumerable<IMapping<IMemberContext, XObject>> MapForSerialization(IMemberContext source, XElement target)
+        public IEnumerable<IMapping<IMemberContext, XObject>> MapForSerialization(IMemberContext source, XElement target, IAdviceRequester adviceRequester)
         {
             if (source == null)
                 throw new ArgumentNullException("source");

@@ -4,6 +4,6 @@ namespace Sekhmet.Serialization
 {
     public interface ISerializerSelector
     {
-        ISerializer Select(IMemberContext source, XObject target);
+        ISerializer Select(IMemberContext source, XObject target, IAdviceRequester adviceRequester);
     }
 }

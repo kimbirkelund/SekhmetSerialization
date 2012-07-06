@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace Sekhmet.Serialization
 {
-    public class DefaultSerializationManager : ISerializationManager
+    public class DefaultSerializationManager : SerializationManagerBase
     {
         private readonly IDeserializerSelector _deserializerSelector;
         private readonly ICompositeObjectContextFactory _objectContextFactory;
@@ -29,51 +29,51 @@ namespace Sekhmet.Serialization
             _typeConverter = typeConverter;
         }
 
-        public object Deserialize(XElement source, Type targetType)
+        public override object Deserialize(XElement source, Type targetType)
         {
             if (source == null)
                 throw new ArgumentNullException("source");
             if (targetType == null)
                 throw new ArgumentNullException("targetType");
 
-            var containerType = typeof(Container<>).MakeGenericType(targetType);
-            var containerTypeObjectContext = _objectContextFactory.CreateForDeserialization(null, containerType);
-            var containerTypeObjectContextMemberContext = containerTypeObjectContext.Members.Single();
-            var deserializer = _deserializerSelector.Select(source, containerTypeObjectContextMemberContext);
+            Type containerType = typeof(Container<>).MakeGenericType(targetType);
+            IObjectContext containerTypeObjectContext = _objectContextFactory.CreateForDeserialization(null, containerType, AdviceRequester);
+            IMemberContext containerTypeObjectContextMemberContext = containerTypeObjectContext.Members.Single();
+            IDeserializer deserializer = _deserializerSelector.Select(source, containerTypeObjectContextMemberContext, AdviceRequester);
 
-            var actualTargetType = _typeConverter.GetActualType(source, containerTypeObjectContextMemberContext);
+            Type actualTargetType = _typeConverter.GetActualType(source, containerTypeObjectContextMemberContext, AdviceRequester);
 
-            var targetTypeObjectContext = _objectContextFactory.CreateForDeserialization(null, actualTargetType);
+            IObjectContext targetTypeObjectContext = _objectContextFactory.CreateForDeserialization(null, actualTargetType, AdviceRequester);
 
-            _rootCreater.ValidateRoot(source, targetTypeObjectContext);
+            _rootCreater.ValidateRoot(source, targetTypeObjectContext, AdviceRequester);
 
             if (deserializer == null)
                 throw new ArgumentException("Unable to find deserializer for specified source.", "source");
 
-            deserializer.Deserialize(source, containerTypeObjectContextMemberContext);
+            deserializer.Deserialize(source, containerTypeObjectContextMemberContext, AdviceRequester);
 
             return containerTypeObjectContextMemberContext.GetValue().GetObject();
         }
 
-        public XElement Serialize(object source)
+        public override XElement Serialize(object source)
         {
             if (source == null)
                 throw new ArgumentNullException("source");
 
-            var containerType = typeof(Container<>).MakeGenericType(source.GetType());
-            var container = Activator.CreateInstance(containerType, source);
+            Type containerType = typeof(Container<>).MakeGenericType(source.GetType());
+            object container = Activator.CreateInstance(containerType, source);
 
-            var containerObjectContext = _objectContextFactory.CreateForSerialization(null, container);
-            var sourceMemberContext = containerObjectContext.Members.Single();
-            var sourceObjectContext = sourceMemberContext.GetValue();
+            IObjectContext containerObjectContext = _objectContextFactory.CreateForSerialization(null, container, AdviceRequester);
+            IMemberContext sourceMemberContext = containerObjectContext.Members.Single();
+            IObjectContext sourceObjectContext = sourceMemberContext.GetValue();
 
-            var target = _rootCreater.CreateRoot(sourceObjectContext);
+            XElement target = _rootCreater.CreateRoot(sourceObjectContext, AdviceRequester);
 
-            var serializer = _serializerSelector.Select(sourceMemberContext, target);
+            ISerializer serializer = _serializerSelector.Select(sourceMemberContext, target, AdviceRequester);
             if (serializer == null)
                 throw new ArgumentException("Unable to find serializer for specified object.", "source");
 
-            serializer.Serialize(sourceMemberContext, target);
+            serializer.Serialize(sourceMemberContext, target, AdviceRequester);
 
             return target;
         }
