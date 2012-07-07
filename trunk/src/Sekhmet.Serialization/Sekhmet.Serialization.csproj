@@ -81,6 +81,7 @@
     <Compile Include="ActualTypeFromAttributeTypeConverter.cs" />
     <Compile Include="AdviceRequestedEventArgs.cs" />
     <Compile Include="AdviceType.cs" />
+    <Compile Include="Advicing\MultipleMatchesAdviceRequestedEventArgs.cs" />
     <Compile Include="BuiltInCollectionsObjectContextFactory.cs" />
     <Compile Include="BuiltInCollectionsObjectContextFactory.DeserializationMemberContext.cs" />
     <Compile Include="BuiltInCollectionsObjectContextFactory.DeserializationObjectContext.cs" />
@@ -94,7 +95,6 @@
     <Compile Include="CompositeDeserializerSelector.cs" />
     <Compile Include="CompositeObjectContextFactory.cs" />
     <Compile Include="CompositeSerializerSelector.cs" />
-    <Compile Include="Constants.cs" />
     <Compile Include="DefaultAdviceRequester.cs" />
     <Compile Include="DefaultIsNullableStrategy.cs" />
     <Compile Include="DefaultSerializationManager.cs" />

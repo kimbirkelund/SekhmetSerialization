@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -11,6 +12,13 @@ namespace Sekhmet.Serialization.Utility
             return "[" + xobj.ToCleanFriendlyName() + "]";
         }
 
+        private static IEnumerable<XAttribute> GetRelevantAttributes(XElement xelem)
+        {
+            return xelem.Attributes()
+                .Where(a => a.Name != Constants.XmlSchemaInstanceNamespaceAttribute.Name)
+                .Where(a => a.Name != Constants.XmlSchemaNamespaceAttribute.Name);
+        }
+
         private static string ToCleanFriendlyName(this XObject xobj, bool includePrefix = true, bool elementIncludeAttributes = true)
         {
             string prefix = includePrefix && xobj.Parent != null
@@ -21,8 +29,9 @@ namespace Sekhmet.Serialization.Utility
             {
                 case XmlNodeType.Element:
                     var xelem = (XElement)xobj;
-                    string attrsStr = elementIncludeAttributes && xelem.Attributes().Any()
-                                          ? "<" + string.Join(", ", xelem.Attributes().Select(a => a.ToCleanFriendlyName(false)).ToArray()) + ">"
+                    IEnumerable<XAttribute> attributes = GetRelevantAttributes(xelem);
+                    string attrsStr = elementIncludeAttributes && attributes.Any()
+                                          ? "<" + string.Join(", ", attributes.Select(a => a.ToCleanFriendlyName(false)).ToArray()) + ">"
                                           : "";
                     return prefix + "/" + xelem.Name + attrsStr;
                 case XmlNodeType.Attribute:

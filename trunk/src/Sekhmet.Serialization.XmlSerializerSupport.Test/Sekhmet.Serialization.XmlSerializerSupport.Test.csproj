@@ -115,6 +115,7 @@
     <Compile Include="ListSerializationSupport\Bar.cs" />
     <Compile Include="ListSerializationSupport\Foo.cs" />
     <Compile Include="ListSerializationSupport\ListSerializationSupportTestCase.cs" />
+    <Compile Include="MultipleMatchingElementsTest.cs" />
     <Compile Include="NonIListListSerializationSupport\Bar.cs" />
     <Compile Include="NonIListListSerializationSupport\Foo.cs" />
     <Compile Include="NonIListListSerializationSupport\NonIListList.cs" />

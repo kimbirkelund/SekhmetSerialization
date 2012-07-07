@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using Sekhmet.Serialization.Utility;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport.Test.Nullable
 {

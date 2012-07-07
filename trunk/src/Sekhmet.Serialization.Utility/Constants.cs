@@ -1,6 +1,6 @@
 using System.Xml.Linq;
 
-namespace Sekhmet.Serialization
+namespace Sekhmet.Serialization.Utility
 {
     public static class Constants
     {

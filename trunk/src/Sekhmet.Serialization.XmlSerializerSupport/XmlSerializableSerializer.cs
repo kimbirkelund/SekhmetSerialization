@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Sekhmet.Serialization.Utility;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport
 {

@@ -25,7 +25,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                 switch (sourceType.Key)
                 {
                     case XmlNodeType.Element:
-                        foreach (var mapping in GetMappingsFromElement(sourceType.Value, source, targetObject, member))
+                        foreach (var mapping in GetMappingsFromElement(sourceType.Value, source, targetObject, member, adviceRequester))
                             yield return mapping;
                         break;
                     case XmlNodeType.Attribute:
@@ -110,22 +110,36 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             return new Mapping<XObject, IMemberContext>(attr, member);
         }
 
-        private static IEnumerable<IMapping<XElement, IMemberContext>> GetMappingsFromElement(IEnumerable<string> potentialNames, XElement source, IObjectContext targetOwner, IMemberContext target)
+        private static IEnumerable<IMapping<XElement, IMemberContext>> GetMappingsFromElement(IEnumerable<string> potentialNames, XElement source, IObjectContext targetOwner, IMemberContext target, IAdviceRequester adviceRequester)
         {
             if (!target.ContractType.IsSubTypeOf<IXmlSerializable>() && target.ContractType.IsCollectionType() && HasXmlElementAttribute(target))
                 yield return new Mapping<XElement, IMemberContext>(source, target);
             else
             {
-                var elem = potentialNames
-                        .Select(name => source.Element(name))
+                var elems = potentialNames
+                        .Distinct()
+                        .SelectMany(name => source.Elements(name))
                         .Where(e => e != null)
-                        .FirstOrDefault();
+                        .ToList();
+
+                var elem = elems.FirstOrDefault();
+                if (elems.Count > 1)
+                    elem = RequestAdviceForMultipleMatches(adviceRequester, source, targetOwner, target, elems, elems.First());
 
                 yield return new Mapping<XElement, IMemberContext>(elem, target);
             }
 
             foreach (var mapping in GetMappingsFromElementForXmlChoiceIdentifierAttribute(potentialNames, source, targetOwner, target))
                 yield return mapping;
+        }
+
+        private static XElement RequestAdviceForMultipleMatches(IAdviceRequester adviceRequester, XElement source, IObjectContext targetOwner, IMemberContext target, IEnumerable<XElement> matches, XElement selectedMatch)
+        {
+            var args = new Advicing.MultipleMatchesAdviceRequestedEventArgs(source, targetOwner, target, matches, selectedMatch);
+
+            adviceRequester.RequestAdvice(args);
+
+            return args.SelectedMatch as XElement;
         }
 
         private static IEnumerable<IMapping<XElement, IMemberContext>> GetMappingsFromElementForXmlChoiceIdentifierAttribute(IEnumerable<string> potentialNames, XElement source, IObjectContext targetOwner, IMemberContext target)
@@ -172,28 +186,30 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                     .OfType<XmlAttributeAttribute>()
                     .ToList();
             if (attrAttrs.Any())
-                return GetSourceTypeAndPotentialNames(member, XmlNodeType.Attribute, attrAttrs.Select(a => a.AttributeName));
+                return GetSourceTypeAndPotentialNames(member, XmlNodeType.Attribute, attrAttrs.Select(a => a.AttributeName).Where(n => !string.IsNullOrWhiteSpace(n)));
 
             var elemAttrs = member.Attributes
                     .OfType<XmlElementAttribute>()
                     .ToList();
             if (elemAttrs.Any())
-                return GetSourceTypeAndPotentialNames(member, XmlNodeType.Element, elemAttrs.Select(a => a.ElementName));
+                return GetSourceTypeAndPotentialNames(member, XmlNodeType.Element, elemAttrs.Select(a => a.ElementName).Where(n => !string.IsNullOrWhiteSpace(n)));
 
             var arrayAttrs = member.Attributes
                     .OfType<XmlArrayAttribute>()
                     .ToList();
             if (arrayAttrs.Any())
-                return GetSourceTypeAndPotentialNames(member, XmlNodeType.Element, arrayAttrs.Select(a => a.ElementName));
+                return GetSourceTypeAndPotentialNames(member, XmlNodeType.Element, arrayAttrs.Select(a => a.ElementName).Where(n => !string.IsNullOrWhiteSpace(n)));
 
             return new KeyValuePair<XmlNodeType, IEnumerable<string>>(XmlNodeType.Element, new[] { member.Name });
         }
 
         private static KeyValuePair<XmlNodeType, IEnumerable<string>> GetSourceTypeAndPotentialNames(IMemberContext member, XmlNodeType type, IEnumerable<string> potentialNames)
         {
-            return new KeyValuePair<XmlNodeType, IEnumerable<string>>(type,
-                                                                      potentialNames.Concat(new[] { member.Name })
-                                                                              .Where(n => !string.IsNullOrWhiteSpace(n)));
+            if (!potentialNames.Any())
+                potentialNames = new[] { member.Name };
+
+            return new KeyValuePair<XmlNodeType, IEnumerable<string>>(type, potentialNames
+                                                                                    .Where(n => !string.IsNullOrWhiteSpace(n)));
         }
 
         private static KeyValuePair<XmlNodeType, XName> GetTargetTypeAndName(IMemberContext memberContext)

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Sekhmet.Serialization.Utility;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport
 {

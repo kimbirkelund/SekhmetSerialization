@@ -3,6 +3,7 @@ using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using NUnit.Framework;
+using Sekhmet.Serialization.Utility;
 using Sekhmet.Serialization.XmlSerializerSupport.Test.Dummies;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializerConformanceTests

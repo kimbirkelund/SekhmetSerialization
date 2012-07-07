@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using System.Xml.Linq;
+using Sekhmet.Serialization.Utility;
 
 namespace Sekhmet.Serialization
 {
