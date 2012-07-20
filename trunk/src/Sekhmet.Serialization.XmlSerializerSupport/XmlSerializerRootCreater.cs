@@ -26,7 +26,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                                         .Where(n => !string.IsNullOrWhiteSpace(n))
                                         .FirstOrDefault() ?? target.Type.Name;
 
-            if (source.Name != expectedRootName)
+            if (!CaseInsensitiveXNameComparer.Instance.Equals(source.Name, expectedRootName))
                 throw new ArgumentException("Root name '" + source.Name + "' did not match expected root name '" + expectedRootName + "'.");
         }
     }

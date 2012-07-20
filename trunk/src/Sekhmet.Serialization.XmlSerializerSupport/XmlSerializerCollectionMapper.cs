@@ -33,7 +33,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             var elementNames = GetElementNames(target);
 
             return source.Elements()
-                    .Where(e => elementNames.Contains(e.Name))
+                    .Where(e => elementNames.Contains(e.Name, CaseInsensitiveXNameComparer.Instance))
                     .Select(elem => new Mapping<XObject, IMemberContext>(elem, targetObject.Members.Single()))
                     .ToList();
         }

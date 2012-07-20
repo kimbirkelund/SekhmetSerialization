@@ -103,7 +103,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
         private static IMapping<XObject, IMemberContext> GetMappingFromAttribute(IEnumerable<string> potentialNames, XElement source, IMemberContext member)
         {
             var attr = potentialNames
-                    .Select(name => source.Attribute(name))
+                    .Select(name => source.Attribute(name, CaseInsensitiveXNameComparer.Instance))
                     .Where(a => a != null)
                     .FirstOrDefault();
 
@@ -118,7 +118,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             {
                 var elems = potentialNames
                         .Distinct()
-                        .SelectMany(name => source.Elements(name))
+                        .SelectMany(name => source.Elements(name, CaseInsensitiveXNameComparer.Instance))
                         .Where(e => e != null)
                         .ToList();
 

@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CaseInsensitiveXNameComparer.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadLockScope.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="UpgradeableReadLockScope.cs" />
     <Compile Include="WriteLockScope.cs" />
+    <Compile Include="XElementExtensions.cs" />
     <Compile Include="XObjectExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

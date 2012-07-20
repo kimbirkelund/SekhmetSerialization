@@ -86,6 +86,9 @@
     <Compile Include="BaseTypeSerialization\BaseTypeSerializationTestCase.cs" />
     <Compile Include="BaseTypeSerialization\FooWithBarBase.cs" />
     <Compile Include="BaseTypeSerialization\IBar.cs" />
+    <Compile Include="CaseInsensitivity\Bar.cs" />
+    <Compile Include="CaseInsensitivity\Foo.cs" />
+    <Compile Include="CaseInsensitivity\CaseInsensitivityTestCase.cs" />
     <Compile Include="Dummies\Bar.cs" />
     <Compile Include="Dummies\Bar1.cs" />
     <Compile Include="Dummies\Bar2.cs" />
