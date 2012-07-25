@@ -73,7 +73,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
         {
             var elementType = GetElementType(target.ContractType);
 
-            return new XName[] { elementType.Name };
+            return new[] { elementType.Name.SafeToXName() };
         }
 
         private static IEnumerable<XName> GetElementNamesFromXmlArrayItemAttributes(IMemberContext target)
@@ -140,7 +140,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             if (actualType == null)
                 return null;
 
-            return actualType.Name;
+            return actualType.Name.SafeToXName();
         }
 
         private static string NameElementFromArrayItemAttributeExactType(IMemberContext memberContext)
@@ -171,7 +171,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
 
         private static XName NameElementFromContractType(IMemberContext memberContext)
         {
-            return memberContext.ContractType.Name;
+            return memberContext.ContractType.Name.SafeToXName();
         }
 
         private static string NameElementFromElementAttributeExactType(IMemberContext memberContext)

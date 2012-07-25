@@ -73,7 +73,9 @@
     <Compile Include="XmlSerializableSerializerSelector.cs" />
     <Compile Include="XmlSerializerCollectionMapper.cs" />
     <Compile Include="XmlSerializerMapper.cs" />
-    <Compile Include="XmlSerializerRootCreater.cs" />
+    <Compile Include="XmlSerializerRootCreater.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="XmlSerializerSerializationManagerFactory.cs" />
     <Compile Include="XmlSerializerTypeConverter.cs" />
     <Compile Include="XmlSerializerValueTypeDeserializerSelector.cs" />

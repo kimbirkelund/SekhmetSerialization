@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlSerializableUsingXmlSerializer
 {
+    [XmlRoot("XmlSerializableFooUsingXmlSerializer")]
     public class XmlSerializableFooUsingXmlSerializer : List<Bar>, IXmlSerializable
     {
         public XmlSchema GetSchema()

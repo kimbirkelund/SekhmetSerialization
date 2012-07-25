@@ -78,6 +78,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayRoot\ArrayRootTestCase1.cs" />
+    <Compile Include="ArrayRoot\ArrayRootTestCase2.cs" />
+    <Compile Include="ArrayRoot\Foo.cs" />
     <Compile Include="ArraySerializationSupport\ArraySerializationSupportTestCase.cs" />
     <Compile Include="ArraySerializationSupport\Bar.cs" />
     <Compile Include="ArraySerializationSupport\Foo.cs" />
@@ -86,6 +89,9 @@
     <Compile Include="BaseTypeSerialization\BaseTypeSerializationTestCase.cs" />
     <Compile Include="BaseTypeSerialization\FooWithBarBase.cs" />
     <Compile Include="BaseTypeSerialization\IBar.cs" />
+    <Compile Include="ListRoot\ListRootTestCase1.cs" />
+    <Compile Include="ListRoot\ListRootTestCase2.cs" />
+    <Compile Include="ListRoot\Foo.cs" />
     <Compile Include="CaseInsensitivity\Bar.cs" />
     <Compile Include="CaseInsensitivity\Foo.cs" />
     <Compile Include="CaseInsensitivity\CaseInsensitivityTestCase.cs" />
@@ -165,6 +171,7 @@
     <Compile Include="XmlSerializable\FooWithXmlSerialiableBar.cs" />
     <Compile Include="XmlSerializable\IBar.cs" />
     <Compile Include="XmlSerializable\XmlSerializableBar.cs" />
+    <Compile Include="XmlSerializerConformanceTests\VariousRootsTest.cs" />
     <Compile Include="XmlSerializerSupportTestCaseRunnerTest.cs" />
     <Compile Include="TestSerializationOfBar\TestSerializationOfBarTestCase.cs" />
     <Compile Include="TestSerializationOfFoo\TestSerializationOfFooTestCase.cs" />
