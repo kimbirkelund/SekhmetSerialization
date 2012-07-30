@@ -135,6 +135,9 @@
     <Compile Include="NonNestedCollection\Bar.cs" />
     <Compile Include="NonNestedCollection\Foo.cs" />
     <Compile Include="NonNestedCollection\NonNestedCollectionTestCase.cs" />
+    <Compile Include="NonPublicMembersSerialization\NonPublicMembersSerializationTestCase.cs" />
+    <Compile Include="NonPublicMembersSerialization\Bar.cs" />
+    <Compile Include="NonPublicMembersSerialization\Foo.cs" />
     <Compile Include="Nullable\Foo.cs" />
     <Compile Include="Nullable\NullableTestCase.cs" />
     <Compile Include="ObjectListSerialization\Bar.cs" />

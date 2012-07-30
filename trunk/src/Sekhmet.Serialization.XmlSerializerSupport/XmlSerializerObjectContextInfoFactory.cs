@@ -83,6 +83,8 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                    where GetPropertyHasPublicGetterAndSetter(propertyInfo)
                          || GetMemberHasAttribute<XmlAttributeAttribute>(attrs, () => propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null)
                          || GetMemberHasAttribute<XmlElementAttribute>(attrs, () => propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null)
+                         || GetMemberHasAttribute<XmlArrayAttribute>(attrs, () => propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null)
+                         || GetMemberHasAttribute<XmlArrayItemAttribute>(attrs, () => propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null)
                    select propertyInfo;
         }
 
