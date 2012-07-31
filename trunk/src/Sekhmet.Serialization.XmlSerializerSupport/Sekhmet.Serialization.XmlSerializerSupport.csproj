@@ -64,9 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IncompatibleParentTypeAdviceRequestedEventArgs.cs" />
     <Compile Include="XmlParentAttribute.cs" />
-    <Compile Include="XmlSerializerAdviceTypes.cs" />
     <Compile Include="XmlSerializerIsNullableStrategy.cs" />
     <Compile Include="XmlSerializerObjectContextInfoFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

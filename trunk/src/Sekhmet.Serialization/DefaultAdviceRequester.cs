@@ -36,12 +36,12 @@ namespace Sekhmet.Serialization
                     _advisors.Add(existingAdvisor);
                 }
 
-                if (existingAdvisor.Types.Contains(CommonAdviceTypes.All))
+                if (existingAdvisor.Types.Contains(CommonAdvisorTypes.All))
                     return;
-                if (types.Contains(CommonAdviceTypes.All))
+                if (types.Contains(CommonAdvisorTypes.All))
                 {
                     existingAdvisor.Types.Clear();
-                    existingAdvisor.Types.Add(CommonAdviceTypes.All);
+                    existingAdvisor.Types.Add(CommonAdvisorTypes.All);
                     return;
                 }
 
@@ -79,12 +79,12 @@ namespace Sekhmet.Serialization
                 if (existingAdvisor == null)
                     return;
 
-                if (types.Contains(CommonAdviceTypes.All))
+                if (types.Contains(CommonAdvisorTypes.All))
                 {
                     _advisors.Remove(existingAdvisor);
                     return;
                 }
-                if (existingAdvisor.Types.Contains(CommonAdviceTypes.All))
+                if (existingAdvisor.Types.Contains(CommonAdvisorTypes.All))
                     return;
 
                 List<AdviceType> combinedTypes = existingAdvisor.Types.Except(types)
@@ -105,7 +105,7 @@ namespace Sekhmet.Serialization
             {
                 foreach (AdvisorInfo advisor in _advisors)
                 {
-                    if (!advisor.Types.Contains(CommonAdviceTypes.All) && !advisor.Types.Contains(args.Type))
+                    if (!advisor.Types.Contains(CommonAdvisorTypes.All) && !advisor.Types.Contains(args.Type))
                         continue;
 
                     advisor.Advisor(_adviceRequestSender, args);

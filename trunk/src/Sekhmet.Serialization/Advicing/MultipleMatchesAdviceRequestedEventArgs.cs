@@ -13,7 +13,7 @@ namespace Sekhmet.Serialization.Advicing
         public IObjectContext TargetOwner { get; private set; }
 
         public MultipleMatchesAdviceRequestedEventArgs(XElement source, IObjectContext targetOwner, IMemberContext target, IEnumerable<XObject> matches, XObject selectedMatch)
-            : base(CommonAdviceTypes.MultipleMatches)
+            : base(CommonAdvisorTypes.MultipleMatches)
         {
             Source = source;
             TargetOwner = targetOwner;

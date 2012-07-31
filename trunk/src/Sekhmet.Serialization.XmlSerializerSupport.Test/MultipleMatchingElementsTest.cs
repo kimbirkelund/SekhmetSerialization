@@ -60,7 +60,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test
                 Assert.AreEqual(bar11Value1, elemBar1Value1.Value);
 
                 args.SelectedMatch = args.Matches.Last();
-            }, CommonAdviceTypes.MultipleMatches);
+            }, CommonAdvisorTypes.MultipleMatches);
 
             var result = manager.Deserialize<Foo>(elem);
 

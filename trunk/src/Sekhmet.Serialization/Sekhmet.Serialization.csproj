@@ -91,7 +91,7 @@
     <Compile Include="CachingObjectContextFactory.cs" />
     <Compile Include="CollectionDeserializerSelector.cs" />
     <Compile Include="CollectionSerializerSelector.cs" />
-    <Compile Include="CommonAdviceTypes.cs" />
+    <Compile Include="CommonAdvisorTypes.cs" />
     <Compile Include="CompositeDeserializerSelector.cs" />
     <Compile Include="CompositeObjectContextFactory.cs" />
     <Compile Include="CompositeSerializerSelector.cs" />
