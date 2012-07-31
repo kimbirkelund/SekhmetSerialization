@@ -34,7 +34,7 @@ namespace Sekhmet.Serialization
             _typeConverter = typeConverter;
         }
 
-        public virtual void Deserialize(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
+        public void Deserialize(XObject source, IMemberContext target, IAdviceRequester adviceRequester)
         {
             if (source == null)
                 return;

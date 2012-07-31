@@ -18,21 +18,21 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             foreach (var propertyInfo in GetRelevantProperties(actualType))
             {
                 yield return new MemberContextInfo(
-                        propertyInfo.PropertyType,
-                        propertyInfo.Name,
-                        propertyInfo.GetCustomAttributes(true).ToList(),
-                        GetGetter(objectContextFactory, propertyInfo, adviceRequester),
-                        GetSetter(propertyInfo));
+                    propertyInfo.PropertyType,
+                    propertyInfo.Name,
+                    propertyInfo.GetCustomAttributes(true).ToList(),
+                    GetGetter(objectContextFactory, propertyInfo, adviceRequester),
+                    GetSetter(propertyInfo));
             }
 
             foreach (var fieldInfo in GetRelevantFields(actualType))
             {
                 yield return new MemberContextInfo(
-                        fieldInfo.FieldType,
-                        fieldInfo.Name,
-                        fieldInfo.GetCustomAttributes(true).ToList(),
-                        GetGetter(objectContextFactory, fieldInfo, adviceRequester),
-                        GetSetter(fieldInfo));
+                    fieldInfo.FieldType,
+                    fieldInfo.Name,
+                    fieldInfo.GetCustomAttributes(true).ToList(),
+                    GetGetter(objectContextFactory, fieldInfo, adviceRequester),
+                    GetSetter(fieldInfo));
             }
         }
 
@@ -47,7 +47,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
         }
 
         private static bool GetMemberHasAttribute<TAttribute>(IEnumerable<object> attrs, Func<bool> validate)
-                where TAttribute : Attribute
+            where TAttribute : Attribute
         {
             if (attrs.OfType<TAttribute>().FirstOrDefault() == null)
                 return false;
@@ -72,9 +72,6 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                    let attrs = fieldInfo.GetCustomAttributes(true)
                    where GetMemberHasAttribute<XmlAttributeAttribute>(attrs, () => !fieldInfo.IsInitOnly)
                          || GetMemberHasAttribute<XmlElementAttribute>(attrs, () => !fieldInfo.IsInitOnly)
-                         || GetMemberHasAttribute<XmlArrayAttribute>(attrs, () => !fieldInfo.IsInitOnly)
-                         || GetMemberHasAttribute<XmlArrayItemAttribute>(attrs, () => !fieldInfo.IsInitOnly)
-                         || GetMemberHasAttribute<XmlParentAttribute>(attrs, () => !fieldInfo.IsInitOnly)
                    select fieldInfo;
         }
 
@@ -88,7 +85,6 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                          || GetMemberHasAttribute<XmlElementAttribute>(attrs, () => propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null)
                          || GetMemberHasAttribute<XmlArrayAttribute>(attrs, () => propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null)
                          || GetMemberHasAttribute<XmlArrayItemAttribute>(attrs, () => propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null)
-                         || GetMemberHasAttribute<XmlParentAttribute>(attrs, () => propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null)
                    select propertyInfo;
         }
 

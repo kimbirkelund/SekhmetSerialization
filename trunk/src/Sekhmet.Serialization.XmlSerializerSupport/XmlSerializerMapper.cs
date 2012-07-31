@@ -20,9 +20,6 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             var targetObject = target.GetValue();
             foreach (var member in targetObject.Members.Where(m => !m.Attributes.OfType<XmlIgnoreAttribute>().Any()))
             {
-                if (member.Attributes.OfType<XmlParentAttribute>().Any())
-                    continue;
-
                 var sourceType = GetSourceTypeAndPotentialNames(member);
 
                 switch (sourceType.Key)
@@ -53,7 +50,6 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
 
             return sourceObject.Members
                     .Where(m => !m.Attributes.OfType<XmlIgnoreAttribute>().Any())
-                    .Where(m => !m.Attributes.OfType<XmlParentAttribute>().Any())
                     .Select(member => CreateMappingForSerialization(member, target))
                     .ToList();
         }

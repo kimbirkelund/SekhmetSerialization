@@ -37,7 +37,7 @@
             DeserializerSelector.AddSelector(new CollectionDeserializerSelector(collectionMapper, DeserializerSelector, ObjectContextFactory));
             DeserializerSelector.AddSelector(new ValueTypeDeserializerSelector());
             DeserializerSelector.AddSelector(new XmlSerializerValueTypeDeserializerSelector());
-            DeserializerSelector.AddSelector(new RecursiveDeserializerSelector(TypeConverter, new XmlSerializerRecursiveDeserializer(mapper, DeserializerSelector, ObjectContextFactory, TypeConverter)));
+            DeserializerSelector.AddSelector(new RecursiveDeserializerSelector(mapper, ObjectContextFactory, DeserializerSelector, TypeConverter));
 
             _serializationManager = new DefaultSerializationManager(ObjectContextFactory, DeserializerSelector, SerializerSelector, new XmlSerializerRootCreater(), TypeConverter);
         }
