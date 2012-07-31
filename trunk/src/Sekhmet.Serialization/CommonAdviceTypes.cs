@@ -1,6 +1,6 @@
 namespace Sekhmet.Serialization
 {
-    public static class CommonAdvisorTypes
+    public static class CommonAdviceTypes
     {
         /// <summary>
         ///   Meta-type that represents all types.
