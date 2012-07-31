@@ -165,6 +165,9 @@
     <Compile Include="XmlIgnore\Foo.cs" />
     <Compile Include="XmlIgnore\IManuallyParsed.cs" />
     <Compile Include="XmlIgnore\ManuallyParsed.cs" />
+    <Compile Include="XmlParent\Bar.cs" />
+    <Compile Include="XmlParent\Foo.cs" />
+    <Compile Include="XmlParent\XmlParentTestCase.cs" />
     <Compile Include="XmlSerializableCollectionType\Bar.cs" />
     <Compile Include="XmlSerializableCollectionType\Foo.cs" />
     <Compile Include="XmlSerializableCollectionType\XmlSerializableList.cs" />

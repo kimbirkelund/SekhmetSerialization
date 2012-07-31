@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="XmlParentAttribute.cs" />
     <Compile Include="XmlSerializerIsNullableStrategy.cs" />
     <Compile Include="XmlSerializerObjectContextInfoFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="XmlSerializableSerializerSelector.cs" />
     <Compile Include="XmlSerializerCollectionMapper.cs" />
     <Compile Include="XmlSerializerMapper.cs" />
+    <Compile Include="XmlSerializerRecursiveDeserializer.cs" />
     <Compile Include="XmlSerializerRootCreater.cs">
       <SubType>Code</SubType>
     </Compile>

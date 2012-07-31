@@ -6,8 +6,19 @@ namespace Sekhmet.Serialization
 {
     public class RecursiveDeserializerSelector : IDeserializerSelector
     {
-        private readonly RecursiveDeserializer _deserializer;
+        private readonly IDeserializer _deserializer;
         private readonly ITypeConverter _typeConverter;
+
+        public RecursiveDeserializerSelector(ITypeConverter typeConverter, IDeserializer deserializer)
+        {
+            if (typeConverter == null)
+                throw new ArgumentNullException("typeConverter");
+            if (deserializer == null)
+                throw new ArgumentNullException("deserializer");
+
+            _typeConverter = typeConverter;
+            _deserializer = deserializer;
+        }
 
         public RecursiveDeserializerSelector(IMapper mapper, IObjectContextFactory objectContextFactory, IDeserializerSelector recursiveSelector, ITypeConverter typeConverter)
         {
