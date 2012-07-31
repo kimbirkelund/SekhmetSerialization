@@ -5,9 +5,6 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.XmlParent
     public class Bar
     {
         [XmlParent]
-        public Bar InvalidTypeParent { get; set; }
-        
-        [XmlParent]
         private Foo _parent;
 
         [XmlIgnore]

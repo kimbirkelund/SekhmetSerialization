@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
-using Sekhmet.Serialization.Utility;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport
 {
@@ -28,24 +27,8 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                     if (!childMember.Attributes.OfType<XmlParentAttribute>().Any())
                         continue;
 
-                    if (!targetValue.Type.IsSubTypeOf(childMember.ContractType))
-                    {
-                        var args = new IncompatibleParentTypeAdviceRequestedEventArgs(targetValue.GetObject(), childMember.ContractType);
-                        adviceRequester.RequestAdvice(args);
-
-                        if (args.Parent == null)
-                            continue;
-                        if (!args.Parent.GetType().IsSubTypeOf(childMember.ContractType))
-                            continue;
-
-                        childMember.SetValue(targetValue);
-                        childMember.CommitChanges();
-                    }
-                    else
-                    {
-                        childMember.SetValue(targetValue);
-                        childMember.CommitChanges();
-                    }
+                    childMember.SetValue(targetValue);
+                    childMember.CommitChanges();
                 }
             }
         }

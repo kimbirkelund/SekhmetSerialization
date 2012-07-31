@@ -24,12 +24,12 @@ namespace Sekhmet.Serialization.Test
             CollectionAssert.AreEquivalent(new AdviceType[] { "Foo", "Bar" }, ai1.Types);
             CollectionAssert.AreEquivalent(new AdviceType[] { "Baz", "Bar" }, ai2.Types);
 
-            dar.AddAdvisor(eventHandler1, CommonAdviceTypes.All);
+            dar.AddAdvisor(eventHandler1, CommonAdvisorTypes.All);
 
             Assert.AreEqual(2, dar.Advisors.Count());
             ai1 = dar.Advisors.Where(ai => ai.Advisor == eventHandler1).Single();
             ai2 = dar.Advisors.Where(ai => ai.Advisor == eventHandler2).Single();
-            CollectionAssert.AreEquivalent(new[] { CommonAdviceTypes.All }, ai1.Types);
+            CollectionAssert.AreEquivalent(new[] { CommonAdvisorTypes.All }, ai1.Types);
             CollectionAssert.AreEquivalent(new AdviceType[] { "Baz", "Bar" }, ai2.Types);
         }
 
@@ -41,7 +41,7 @@ namespace Sekhmet.Serialization.Test
             EventHandler<AdviceRequestedEventArgs> eventHandler1 = delegate { };
             EventHandler<AdviceRequestedEventArgs> eventHandler2 = delegate { };
 
-            dar.AddAdvisor(eventHandler1, CommonAdviceTypes.All);
+            dar.AddAdvisor(eventHandler1, CommonAdvisorTypes.All);
             dar.AddAdvisor(eventHandler2, "Baz", "Bar");
 
             Assert.AreEqual(2, dar.Advisors.Count());
@@ -49,7 +49,7 @@ namespace Sekhmet.Serialization.Test
             DefaultAdviceRequester.AdvisorInfo ai1 = dar.Advisors.Where(ai => ai.Advisor == eventHandler1).Single();
             DefaultAdviceRequester.AdvisorInfo ai2 = dar.Advisors.Where(ai => ai.Advisor == eventHandler2).Single();
 
-            CollectionAssert.AreEquivalent(new[] { CommonAdviceTypes.All }, ai1.Types);
+            CollectionAssert.AreEquivalent(new[] { CommonAdvisorTypes.All }, ai1.Types);
             CollectionAssert.AreEquivalent(new AdviceType[] { "Baz", "Bar" }, ai2.Types);
 
             dar.RemoveAdvisor(eventHandler2, "Baz");
@@ -58,7 +58,7 @@ namespace Sekhmet.Serialization.Test
             ai1 = dar.Advisors.Where(ai => ai.Advisor == eventHandler1).Single();
             ai2 = dar.Advisors.Where(ai => ai.Advisor == eventHandler2).Single();
 
-            CollectionAssert.AreEquivalent(new[] { CommonAdviceTypes.All }, ai1.Types);
+            CollectionAssert.AreEquivalent(new[] { CommonAdvisorTypes.All }, ai1.Types);
             CollectionAssert.AreEquivalent(new AdviceType[] { "Bar" }, ai2.Types);
 
             dar.RemoveAdvisor(eventHandler2, "Bar");
@@ -66,16 +66,16 @@ namespace Sekhmet.Serialization.Test
             Assert.AreEqual(1, dar.Advisors.Count());
             ai1 = dar.Advisors.Where(ai => ai.Advisor == eventHandler1).Single();
 
-            CollectionAssert.AreEquivalent(new[] { CommonAdviceTypes.All }, ai1.Types);
+            CollectionAssert.AreEquivalent(new[] { CommonAdvisorTypes.All }, ai1.Types);
 
             dar.RemoveAdvisor(eventHandler1, "Bar");
 
             Assert.AreEqual(1, dar.Advisors.Count());
             ai1 = dar.Advisors.Where(ai => ai.Advisor == eventHandler1).Single();
 
-            CollectionAssert.AreEquivalent(new[] { CommonAdviceTypes.All }, ai1.Types);
+            CollectionAssert.AreEquivalent(new[] { CommonAdvisorTypes.All }, ai1.Types);
 
-            dar.RemoveAdvisor(eventHandler1, CommonAdviceTypes.All);
+            dar.RemoveAdvisor(eventHandler1, CommonAdvisorTypes.All);
 
             Assert.AreEqual(0, dar.Advisors.Count());
         }
@@ -151,7 +151,7 @@ namespace Sekhmet.Serialization.Test
 
             dar.AddAdvisor(advisor1, "Foo", "Bar");
             dar.AddAdvisor(advisor2, "Foo", "Baz");
-            dar.AddAdvisor(advisor3, CommonAdviceTypes.All);
+            dar.AddAdvisor(advisor3, CommonAdvisorTypes.All);
 
             dar.RequestAdvice(new AdviceRequestedEventArgs("Foo"));
             dar.RequestAdvice(new AdviceRequestedEventArgs("Bar"));
