@@ -71,10 +71,12 @@ namespace Sekhmet.Serialization.TestUtility
             }
 
             Assert.AreEqual(expected.Name, actual.Name);
+            Assert.AreEqual(expected.HasAttributes, actual.HasAttributes, "expected.HasAttributes: " + expected.HasAttributes + ", actual.HasAttributes: " + actual.HasAttributes);
+            Assert.AreEqual(expected.HasElements, actual.HasElements, "expected.HasElements: " + expected.HasElements + ", actual.HasElements: " + actual.HasElements);
 
             AssertDeepEquals(expected.Attributes(), actual.Attributes());
 
-            if (expected.Elements().Any())
+            if (expected.HasElements)
                 AssertDeepEquals(expected.Elements(), actual.Elements());
             else
                 Assert.AreEqual(expected.Value, actual.Value);

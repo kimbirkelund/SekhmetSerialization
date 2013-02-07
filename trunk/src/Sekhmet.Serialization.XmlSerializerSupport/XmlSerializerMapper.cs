@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Sekhmet.Serialization.Advicing;
 using Sekhmet.Serialization.Utility;
 
 namespace Sekhmet.Serialization.XmlSerializerSupport
@@ -49,9 +50,9 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                 return Enumerable.Empty<IMapping<IMemberContext, XObject>>();
 
             return sourceObject.Members
-                    .Where(m => !m.Attributes.OfType<XmlIgnoreAttribute>().Any())
-                    .Select(member => CreateMappingForSerialization(member, target))
-                    .ToList();
+                               .Where(m => !m.Attributes.OfType<XmlIgnoreAttribute>().Any())
+                               .Select(member => CreateMappingForSerialization(member, target))
+                               .ToList();
         }
 
         private static IMapping<IMemberContext, XObject> CreateMappingForSerialization(IMemberContext member, XElement target)
@@ -63,7 +64,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             switch (targetTypeAndName.Key)
             {
                 case XmlNodeType.Element:
-                    if (!member.ContractType.IsSubTypeOf<IXmlSerializable>() && member.ContractType.IsCollectionType() && HasXmlElementAttribute(member))
+                    if (!member.ContractType.IsSubTypeOf<IXmlSerializable>() && member.ContractType.IsCollectionType() && HasXmlElementAttribute(member) || HasXmlTextAttribute(member))
                     {
                         xobj = target;
                         addTargetToParent = false;
@@ -103,24 +104,25 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
         private static IMapping<XObject, IMemberContext> GetMappingFromAttribute(IEnumerable<string> potentialNames, XElement source, IMemberContext member)
         {
             var attr = potentialNames
-                    .Select(name => source.Attribute(name, CaseInsensitiveXNameComparer.Instance))
-                    .Where(a => a != null)
-                    .FirstOrDefault();
+                .Select(name => source.Attribute(name, CaseInsensitiveXNameComparer.Instance))
+                .Where(a => a != null)
+                .FirstOrDefault();
 
             return new Mapping<XObject, IMemberContext>(attr, member);
         }
 
-        private static IEnumerable<IMapping<XElement, IMemberContext>> GetMappingsFromElement(IEnumerable<string> potentialNames, XElement source, IObjectContext targetOwner, IMemberContext target, IAdviceRequester adviceRequester)
+        private static IEnumerable<IMapping<XElement, IMemberContext>> GetMappingsFromElement(IEnumerable<string> potentialNames, XElement source, IObjectContext targetOwner, IMemberContext target,
+                                                                                              IAdviceRequester adviceRequester)
         {
-            if (!target.ContractType.IsSubTypeOf<IXmlSerializable>() && target.ContractType.IsCollectionType() && HasXmlElementAttribute(target))
+            if (!target.ContractType.IsSubTypeOf<IXmlSerializable>() && target.ContractType.IsCollectionType() && HasXmlElementAttribute(target) || HasXmlTextAttribute(target))
                 yield return new Mapping<XElement, IMemberContext>(source, target);
             else
             {
                 var elems = potentialNames
-                        .Distinct()
-                        .SelectMany(name => source.Elements(name, CaseInsensitiveXNameComparer.Instance))
-                        .Where(e => e != null)
-                        .ToList();
+                    .Distinct()
+                    .SelectMany(name => source.Elements(name, CaseInsensitiveXNameComparer.Instance))
+                    .Where(e => e != null)
+                    .ToList();
 
                 var elem = elems.FirstOrDefault();
                 if (elems.Count > 1)
@@ -133,27 +135,29 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                 yield return mapping;
         }
 
-        private static XElement RequestAdviceForMultipleMatches(IAdviceRequester adviceRequester, XElement source, IObjectContext targetOwner, IMemberContext target, IEnumerable<XElement> matches, XElement selectedMatch)
+        private static XElement RequestAdviceForMultipleMatches(IAdviceRequester adviceRequester, XElement source, IObjectContext targetOwner, IMemberContext target, IEnumerable<XElement> matches,
+                                                                XElement selectedMatch)
         {
-            var args = new Advicing.MultipleMatchesAdviceRequestedEventArgs(source, targetOwner, target, matches, selectedMatch);
+            var args = new MultipleMatchesAdviceRequestedEventArgs(source, targetOwner, target, matches, selectedMatch);
 
             adviceRequester.RequestAdvice(args);
 
             return args.SelectedMatch as XElement;
         }
 
-        private static IEnumerable<IMapping<XElement, IMemberContext>> GetMappingsFromElementForXmlChoiceIdentifierAttribute(IEnumerable<string> potentialNames, XElement source, IObjectContext targetOwner, IMemberContext target)
+        private static IEnumerable<IMapping<XElement, IMemberContext>> GetMappingsFromElementForXmlChoiceIdentifierAttribute(IEnumerable<string> potentialNames, XElement source,
+                                                                                                                             IObjectContext targetOwner, IMemberContext target)
         {
             var xmlChoiceIdentifierAttr = target.Attributes
-                    .OfType<XmlChoiceIdentifierAttribute>()
-                    .FirstOrDefault();
+                                                .OfType<XmlChoiceIdentifierAttribute>()
+                                                .FirstOrDefault();
 
             if (xmlChoiceIdentifierAttr == null)
                 yield break;
 
             var choiceIdentifier = targetOwner.Members
-                    .Where(m => m.Name == xmlChoiceIdentifierAttr.MemberName)
-                    .SingleOrDefault();
+                                              .Where(m => m.Name == xmlChoiceIdentifierAttr.MemberName)
+                                              .SingleOrDefault();
 
             if (choiceIdentifier == null)
                 throw new ArgumentException("XmlChoiceIdentifierAttribute on '" + target + "' specified member '" + xmlChoiceIdentifierAttr.MemberName + "' that does not exist on object '"
@@ -170,9 +174,9 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             else
             {
                 var elem = potentialNames
-                        .Select(name => source.Element(name))
-                        .Where(e => e != null)
-                        .FirstOrDefault();
+                    .Select(name => source.Element(name))
+                    .Where(e => e != null)
+                    .FirstOrDefault();
                 if (elem == null)
                     yield break;
 
@@ -183,20 +187,20 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
         private static KeyValuePair<XmlNodeType, IEnumerable<string>> GetSourceTypeAndPotentialNames(IMemberContext member)
         {
             var attrAttrs = member.Attributes
-                    .OfType<XmlAttributeAttribute>()
-                    .ToList();
+                                  .OfType<XmlAttributeAttribute>()
+                                  .ToList();
             if (attrAttrs.Any())
                 return GetSourceTypeAndPotentialNames(member, XmlNodeType.Attribute, attrAttrs.Select(a => a.AttributeName).Where(n => !string.IsNullOrWhiteSpace(n)));
 
             var elemAttrs = member.Attributes
-                    .OfType<XmlElementAttribute>()
-                    .ToList();
+                                  .OfType<XmlElementAttribute>()
+                                  .ToList();
             if (elemAttrs.Any())
                 return GetSourceTypeAndPotentialNames(member, XmlNodeType.Element, elemAttrs.Select(a => a.ElementName).Where(n => !string.IsNullOrWhiteSpace(n)));
 
             var arrayAttrs = member.Attributes
-                    .OfType<XmlArrayAttribute>()
-                    .ToList();
+                                   .OfType<XmlArrayAttribute>()
+                                   .ToList();
             if (arrayAttrs.Any())
                 return GetSourceTypeAndPotentialNames(member, XmlNodeType.Element, arrayAttrs.Select(a => a.ElementName).Where(n => !string.IsNullOrWhiteSpace(n)));
 
@@ -209,7 +213,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                 potentialNames = new[] { member.Name };
 
             return new KeyValuePair<XmlNodeType, IEnumerable<string>>(type, potentialNames
-                                                                                    .Where(n => !string.IsNullOrWhiteSpace(n)));
+                                                                                .Where(n => !string.IsNullOrWhiteSpace(n)));
         }
 
         private static KeyValuePair<XmlNodeType, XName> GetTargetTypeAndName(IMemberContext memberContext)
@@ -224,6 +228,11 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
                    ?? NameElementFromMemberName(memberContext);
         }
 
+        private static bool HasXmlTextAttribute(IMemberContext memberContext)
+        {
+            return memberContext.Attributes.OfType<XmlTextAttribute>().Any();
+        }
+
         private static bool HasXmlElementAttribute(IMemberContext memberContext)
         {
             return memberContext.Attributes.OfType<XmlElementAttribute>().Any();
@@ -232,54 +241,54 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
         private static KeyValuePair<XmlNodeType, XName>? NameArrayElementFromNoType(IMemberContext memberContext)
         {
             return memberContext.Attributes.OfType<XmlArrayAttribute>()
-                    .Where(a => !string.IsNullOrWhiteSpace(a.ElementName))
-                    .Select(a => (KeyValuePair<XmlNodeType, XName>?)new KeyValuePair<XmlNodeType, XName>(XmlNodeType.Element, a.ElementName))
-                    .FirstOrDefault();
+                                .Where(a => !string.IsNullOrWhiteSpace(a.ElementName))
+                                .Select(a => (KeyValuePair<XmlNodeType, XName>?)new KeyValuePair<XmlNodeType, XName>(XmlNodeType.Element, a.ElementName))
+                                .FirstOrDefault();
         }
 
         private static KeyValuePair<XmlNodeType, XName>? NameAttributeFromExactTypeMatch(IMemberContext memberContext)
         {
             return memberContext.Attributes.OfType<XmlAttributeAttribute>()
-                    .Where(a => a.Type == GetActualType(memberContext))
-                    .Where(a => !string.IsNullOrWhiteSpace(a.AttributeName))
-                    .Select(a => (KeyValuePair<XmlNodeType, XName>?)new KeyValuePair<XmlNodeType, XName>(XmlNodeType.Attribute, a.AttributeName))
-                    .FirstOrDefault();
+                                .Where(a => a.Type == GetActualType(memberContext))
+                                .Where(a => !string.IsNullOrWhiteSpace(a.AttributeName))
+                                .Select(a => (KeyValuePair<XmlNodeType, XName>?)new KeyValuePair<XmlNodeType, XName>(XmlNodeType.Attribute, a.AttributeName))
+                                .FirstOrDefault();
         }
 
         private static KeyValuePair<XmlNodeType, XName>? NameAttributeFromInstanceOfTypeMatch(IMemberContext memberContext)
         {
             return memberContext.Attributes.OfType<XmlAttributeAttribute>()
-                    .Where(a => a.Type != null && a.Type.IsInstanceOfType(GetActualObject(memberContext)))
-                    .Where(a => !string.IsNullOrWhiteSpace(a.AttributeName))
-                    .Select(a => (KeyValuePair<XmlNodeType, XName>?)new KeyValuePair<XmlNodeType, XName>(XmlNodeType.Attribute, a.AttributeName))
-                    .FirstOrDefault();
+                                .Where(a => a.Type != null && a.Type.IsInstanceOfType(GetActualObject(memberContext)))
+                                .Where(a => !string.IsNullOrWhiteSpace(a.AttributeName))
+                                .Select(a => (KeyValuePair<XmlNodeType, XName>?)new KeyValuePair<XmlNodeType, XName>(XmlNodeType.Attribute, a.AttributeName))
+                                .FirstOrDefault();
         }
 
         private static KeyValuePair<XmlNodeType, XName>? NameAttributeFromNoType(IMemberContext memberContext)
         {
             return memberContext.Attributes.OfType<XmlAttributeAttribute>()
-                    .Where(a => a.Type == null)
-                    .Where(a => !string.IsNullOrWhiteSpace(a.AttributeName))
-                    .Select(a => (KeyValuePair<XmlNodeType, XName>?)new KeyValuePair<XmlNodeType, XName>(XmlNodeType.Attribute, a.AttributeName))
-                    .FirstOrDefault();
+                                .Where(a => a.Type == null)
+                                .Where(a => !string.IsNullOrWhiteSpace(a.AttributeName))
+                                .Select(a => (KeyValuePair<XmlNodeType, XName>?)new KeyValuePair<XmlNodeType, XName>(XmlNodeType.Attribute, a.AttributeName))
+                                .FirstOrDefault();
         }
 
         private static KeyValuePair<XmlNodeType, XName>? NameElementFromExactTypeMatch(IMemberContext memberContext)
         {
             return memberContext.Attributes.OfType<XmlElementAttribute>()
-                    .Where(a => a.Type == GetActualType(memberContext))
-                    .Where(a => !string.IsNullOrWhiteSpace(a.ElementName))
-                    .Select(a => (KeyValuePair<XmlNodeType, XName>?)new KeyValuePair<XmlNodeType, XName>(XmlNodeType.Element, a.ElementName))
-                    .FirstOrDefault();
+                                .Where(a => a.Type == GetActualType(memberContext))
+                                .Where(a => !string.IsNullOrWhiteSpace(a.ElementName))
+                                .Select(a => (KeyValuePair<XmlNodeType, XName>?)new KeyValuePair<XmlNodeType, XName>(XmlNodeType.Element, a.ElementName))
+                                .FirstOrDefault();
         }
 
         private static KeyValuePair<XmlNodeType, XName>? NameElementFromInstanceOfTypeMatch(IMemberContext memberContext)
         {
             return memberContext.Attributes.OfType<XmlElementAttribute>()
-                    .Where(a => a.Type != null && a.Type.IsInstanceOfType(GetActualObject(memberContext)))
-                    .Where(a => !string.IsNullOrWhiteSpace(a.ElementName))
-                    .Select(a => (KeyValuePair<XmlNodeType, XName>?)new KeyValuePair<XmlNodeType, XName>(XmlNodeType.Element, a.ElementName))
-                    .FirstOrDefault();
+                                .Where(a => a.Type != null && a.Type.IsInstanceOfType(GetActualObject(memberContext)))
+                                .Where(a => !string.IsNullOrWhiteSpace(a.ElementName))
+                                .Select(a => (KeyValuePair<XmlNodeType, XName>?)new KeyValuePair<XmlNodeType, XName>(XmlNodeType.Element, a.ElementName))
+                                .FirstOrDefault();
         }
 
         private static KeyValuePair<XmlNodeType, XName> NameElementFromMemberName(IMemberContext memberContext)
@@ -290,10 +299,10 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
         private static KeyValuePair<XmlNodeType, XName>? NameElementFromNoType(IMemberContext memberContext)
         {
             return memberContext.Attributes.OfType<XmlElementAttribute>()
-                    .Where(a => a.Type == null)
-                    .Where(a => !string.IsNullOrWhiteSpace(a.ElementName))
-                    .Select(a => (KeyValuePair<XmlNodeType, XName>?)new KeyValuePair<XmlNodeType, XName>(XmlNodeType.Element, a.ElementName))
-                    .FirstOrDefault();
+                                .Where(a => a.Type == null)
+                                .Where(a => !string.IsNullOrWhiteSpace(a.ElementName))
+                                .Select(a => (KeyValuePair<XmlNodeType, XName>?)new KeyValuePair<XmlNodeType, XName>(XmlNodeType.Element, a.ElementName))
+                                .FirstOrDefault();
         }
     }
 }

@@ -193,6 +193,9 @@
     <Compile Include="XmlSerializerConformanceTests\SerializeNullValueTest.cs" />
     <Compile Include="XmlSerializerConformanceTests\SerializeReadOnlyPropertyTest.cs" />
     <Compile Include="XmlSerializerConformanceTests\XmlChoiceIdentifierTest.cs" />
+    <Compile Include="XmlTextAttributeSupport\Bar.cs" />
+    <Compile Include="XmlTextAttributeSupport\Foo.cs" />
+    <Compile Include="XmlTextAttributeSupport\XmlTextAttributeTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sekhmet.Serialization.TestUtility\Sekhmet.Serialization.TestUtility.csproj">
@@ -216,6 +219,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
