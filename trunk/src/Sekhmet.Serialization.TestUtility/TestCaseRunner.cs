@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
-using System.Xml;
+using Common.Logging;
+using Common.Logging.Log4Net;
 using NUnit.Framework;
 using Sekhmet.Serialization.Utility;
+using log4net.Config;
 
 namespace Sekhmet.Serialization.TestUtility
 {
@@ -16,8 +19,8 @@ namespace Sekhmet.Serialization.TestUtility
 
         static TestCaseRunnerTestBase()
         {
-            log4net.Config.BasicConfigurator.Configure();
-            Common.Logging.LogManager.Adapter = new Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter(new System.Collections.Specialized.NameValueCollection());
+            BasicConfigurator.Configure();
+            LogManager.Adapter = new Log4NetLoggerFactoryAdapter(new NameValueCollection());
         }
 
         [TestCaseSource("TestSerializationTestCasesData")]
@@ -40,17 +43,17 @@ namespace Sekhmet.Serialization.TestUtility
             testCase.AssertCorrectXml(actual);
         }
 
-        private IEnumerable<object[]> GetTestCases()
+        private static IEnumerable<object[]> GetTestCases()
         {
             return AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(a => a.GetTypes())
-                .Where(t => t.IsSubTypeOf<ISerializationTestCase>())
-                .Where(t => t.IsClass)
-                .Where(t => !t.IsAbstract)
-                .Select(Activator.CreateInstance)
-                .Cast<ISerializationTestCase>()
-                .Select(tc => new[] { tc })
-                .ToList();
+                            .SelectMany(a => a.GetTypes())
+                            .Where(t => t.IsSubTypeOf<ISerializationTestCase>())
+                            .Where(t => t.IsClass)
+                            .Where(t => !t.IsAbstract)
+                            .Select(Activator.CreateInstance)
+                            .Cast<ISerializationTestCase>()
+                            .Select(tc => new[]{tc})
+                            .ToList();
         }
     }
 }
