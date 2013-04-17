@@ -9,6 +9,11 @@ namespace Sekhmet.Serialization
     {
         private readonly ValueTypeSerializer _serializer = new ValueTypeSerializer();
 
+        public ValueTypeSerializerSelector(IIsNullableStrategy isNullableStrategy)
+        {
+            _serializer = new ValueTypeSerializer(isNullableStrategy);
+        }
+
         public ISerializer Select(IMemberContext source, XObject target, IAdviceRequester adviceRequester)
         {
             if (source == null)

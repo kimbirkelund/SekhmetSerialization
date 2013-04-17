@@ -29,7 +29,7 @@
             SerializerSelector = new CompositeSerializerSelector();
             SerializerSelector.AddSelector(new XmlSerializableSerializerSelector());
             SerializerSelector.AddSelector(new CollectionSerializerSelector(collectionMapper, SerializerSelector, new XmlSerializerIsNullableStrategy()));
-            SerializerSelector.AddSelector(new ValueTypeSerializerSelector());
+            SerializerSelector.AddSelector(new ValueTypeSerializerSelector(new XmlSerializerIsNullableStrategy()));
             SerializerSelector.AddSelector(new RecursiveSerializerSelector(mapper, SerializerSelector, new XmlSerializerIsNullableStrategy()));
 
             DeserializerSelector = new CompositeDeserializerSelector();

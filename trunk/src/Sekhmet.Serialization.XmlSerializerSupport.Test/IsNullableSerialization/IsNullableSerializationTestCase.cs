@@ -9,6 +9,8 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.IsNullableSerializatio
         {
             AssertCorrectObject(new Foo
             {
+                NotNullableIdWithValue = 42,
+                NullableIdWithValue = 24,
                 Value = new SimpleSerializable()
             }, actual);
         }
@@ -16,13 +18,20 @@ namespace Sekhmet.Serialization.XmlSerializerSupport.Test.IsNullableSerializatio
 
         protected override object CreateObject()
         {
-            return new Foo();
+            return new Foo
+            {
+                NotNullableIdWithValue = 42,
+                NullableIdWithValue = 24
+            };
         }
 
         protected override XElement CreateXml()
         {
             return new XElement("Foo",
                                 Constants.XmlSchemaInstanceNamespaceAttribute,
+                                new XElement("NotNullableIdWithValue", 42),
+                                new XElement("NullableId", Constants.XsiNilAttribute),
+                                new XElement("NullableIdWithValue", 24),
                                 new XElement("Value", Constants.XsiNilAttribute));
         }
     }

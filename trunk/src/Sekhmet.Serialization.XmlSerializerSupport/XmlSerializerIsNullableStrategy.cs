@@ -9,12 +9,8 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
     {
         public override bool IsNullable(IMemberContext source, XElement target, IAdviceRequester adviceRequester)
         {
-            if (base.IsNullable(source, target, adviceRequester))
-                return true;
-
             List<XmlElementAttribute> xmlElementAttrs = source.Attributes
                 .OfType<XmlElementAttribute>()
-                .Where(a => a.IsNullable)
                 .Where(a => string.IsNullOrWhiteSpace(a.ElementName) || a.ElementName == target.Name)
                 .ToList();
 
@@ -28,7 +24,7 @@ namespace Sekhmet.Serialization.XmlSerializerSupport
             }
 
             if (xmlElementAttr == null)
-                return false;
+                return base.IsNullable(source, target, adviceRequester);
 
             return xmlElementAttr.IsNullable;
         }
